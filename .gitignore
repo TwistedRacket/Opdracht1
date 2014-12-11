@@ -9,3 +9,6 @@ TwistedRacket/bin/classes.dex
 TwistedRacket/bin/classes.dex
 TwistedRacket/bin/resources.ap_
 TwistedRacket/bin/TwistedRacket.apk
+TwistedRacket/AmbilWarna/bin/ambilwarna.jar
+TwistedRacket/AmbilWarna/bin/classes/yuku/ambilwarna/AmbilWarnaDialog$1.class
+*.class
