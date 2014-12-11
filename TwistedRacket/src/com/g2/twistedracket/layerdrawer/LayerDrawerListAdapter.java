@@ -7,13 +7,15 @@ import com.g2.twistedracket.canvas.Item;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.view.View.OnClickListener;
 
 public class LayerDrawerListAdapter extends BaseAdapter {
 
@@ -36,41 +38,78 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.layerName);
+			holder.visibilityOnButton = (ImageButton) convertView
+					.findViewById(R.id.visibilityOnButton);
+			holder.visibilityOffButton = (ImageButton) convertView
+					.findViewById(R.id.visibilityOffButton);
+			holder.deleteButton = (ImageButton) convertView
+					.findViewById(R.id.deleteButton);
+			holder.visibilityOffButton.setVisibility(View.INVISIBLE);
+			holder.visibilityOffButton.setEnabled(false);
 
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Log.i("MyActivity", "asdfsa");
-		holder.title.setText("whalaa " + itemList.get(position).shapeVersion);
+		holder.title.setText(itemList.get(position).name);
+
+		holder.visibilityOnButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(context, "Visibility", Toast.LENGTH_SHORT)
+						.show();
+				holder.visibilityOnButton.setVisibility(View.INVISIBLE);
+				holder.visibilityOffButton.setVisibility(View.VISIBLE);
+				holder.visibilityOnButton.setEnabled(false);
+				holder.visibilityOffButton.setEnabled(true);
+			}
+		});
+
+		holder.visibilityOffButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				holder.visibilityOnButton.setVisibility(View.VISIBLE);
+				holder.visibilityOffButton.setVisibility(View.INVISIBLE);
+				holder.visibilityOnButton.setEnabled(true);
+				holder.visibilityOffButton.setEnabled(false);
+			}
+		});
+
+		holder.deleteButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
 
 		return convertView;
 	}
 
 	@Override
 	public int getCount() {
-		return 0;
+		return itemList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		return itemList.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		return 0;
-	}
-
-	public void addItem(Item item) {
-		itemList.add(item);
-		notifyDataSetChanged();
+		return position;
 	}
 
 	private static class ViewHolder {
 		TextView title;
-		ImageView imgIcon;
+		//ImageView imgIcon;
+		ImageButton visibilityOnButton;
+		ImageButton visibilityOffButton;
+		ImageButton deleteButton;
 	}
 
 }

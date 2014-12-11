@@ -2,9 +2,6 @@ package com.g2.twistedracket;
 
 import java.util.ArrayList;
 
-import yuku.ambilwarna.AmbilWarnaDialog;
-import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
-
 import com.g2.twistedracket.canvas.Item;
 import com.g2.twistedracket.layerdrawer.LayerDrawerListAdapter;
 import com.g2.twistedracket.navdrawer.NavigationDrawerItem;
@@ -13,13 +10,17 @@ import com.g2.twistedracket.navdrawer.NavigationDrawerListAdapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -135,40 +136,61 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void createRightLayerDrawer() {
-		layerListView = (ListView) findViewById(R.id.right_menu);
-
 		layerItems = new ArrayList<>();
 		layerItems.add(new Item(Constants.SHAPE_RECT));
+
 		layerListAdapter = new LayerDrawerListAdapter(getApplicationContext(),
 				layerItems);
+
+		layerListView = (ListView) findViewById(R.id.right_menu);
 		layerListView.setAdapter(layerListAdapter);
-
-		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				toolbar, R.string.app_name, R.string.app_name) {
-			@Override
-			public void onDrawerClosed(View view) {
-				super.onDrawerClosed(view);
-			}
-
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerClosed(drawerView);
-			}
-		};
-
-		drawerLayout.setDrawerListener(actionBarDrawerToggle);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
-		actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 		layerListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
 				// canvasFragment.updateCanvas(position);
 				// drawerLayout.closeDrawers();
 			}
 		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = new MenuInflater(this);
+		inflater.inflate(R.menu.main, menu);
+		super.onCreateOptionsMenu(menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		actionBarDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		actionBarDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (drawerLayout.isDrawerOpen(Gravity.START)
+				|| drawerLayout.isDrawerOpen(Gravity.END)) {
+			drawerLayout.closeDrawers();
+			return;
+		}
+		super.onBackPressed();
 	}
 }
