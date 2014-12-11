@@ -4,10 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.example.twistedracket.CanvasView
+    <com.g2.twistedracket.canvas.CanvasView
         android:id="@+id/canvas_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </com.example.twistedracket.CanvasView>
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>

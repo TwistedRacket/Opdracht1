@@ -5,9 +5,12 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="navigation_drawer_items_title">
-        <item>Search Devices</item>
-        <item>Discoverable</item>
-        <item>Settings</item>
+        <item>Rectangle</item>
+        <item>Circle</item>
+        <item>Finger</item>
+        <item>Clear</item>
+        <item>Pick Color</item>
+        <item>Text</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
