@@ -5,6 +5,8 @@ import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 
 import com.g2.twistedracket.canvas.CanvasView;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
-public class CanvasFragment extends Fragment {
+public class CanvasFragment extends Fragment  {
 
-	private CanvasView canvasView;
+	public CanvasView canvasView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,5 +60,28 @@ public class CanvasFragment extends Fragment {
 
 		dialog.show();
 	}
+	public void setText() {
+		Dialog d = new Dialog(getActivity());
+		d.setTitle("Set text");
+		EditText t = new EditText(getActivity());
+		t.setSingleLine(true);
+		Button b = new Button(getActivity());
+		b.setText("OK");
+		d.setContentView(t);
+		d.show();	
+	}
+	
+//	public class TextFrag extends DialogFragment
+//	{
+//		public TextFrag()
+//		{
+//		}
+//		
+//		@Override
+//		public View onCreateView(LayoutInflater in, ViewGroup vg, Bundle b)
+//		{
+//			View v = in.inflate(resource, root)
+//		}
+//	}
 
 }

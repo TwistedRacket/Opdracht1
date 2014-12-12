@@ -10,6 +10,8 @@ import com.g2.twistedracket.layerdrawer.LayerDrawerListAdapter;
 import com.g2.twistedracket.navdrawer.NavigationDrawerItem;
 import com.g2.twistedracket.navdrawer.NavigationDrawerListAdapter;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -22,6 +24,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -130,6 +134,10 @@ public class MainActivity extends ActionBarActivity {
 						if (position == 4) {
 							canvasFragment.createColorPicker();
 						}
+						if(position ==5)
+						{
+
+						}
 					}
 				});
 	}
@@ -171,4 +179,5 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 	}
+
 }

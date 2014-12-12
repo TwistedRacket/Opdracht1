@@ -2,10 +2,13 @@ package com.g2.twistedracket.canvas;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.Text;
+
 import com.g2.twistedracket.Constants;
 import com.g2.twistedracket.R;
 import com.g2.twistedracket.R.color;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +21,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class CanvasView extends View {
 
@@ -104,7 +111,8 @@ public class CanvasView extends View {
 				break;
 
 			case Constants.TEXT:
-				canvas.drawText("BIER", item.posX, item.posY, paint);
+
+				canvas.drawText("", item.posX, item.posY, paint);
 				break;
 			}
 			pos++;
@@ -189,6 +197,16 @@ public class CanvasView extends View {
 			invalidate();
 			return true;
 		}
+	}
+	public void setText() {
+		Dialog d = new Dialog(getContext());
+		d.setTitle("Set text");
+		EditText t = new EditText(getContext());
+		t.setSingleLine(true);
+		Button b = new Button(getContext());
+		b.setText("OK");
+		d.setContentView(t);
+		d.show();	
 	}
 
 }
