@@ -133,22 +133,19 @@ public class MainActivity extends ActionBarActivity implements
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 
-						canvasFragment.updateCanvas(position);
 						drawerLayout.closeDrawers();
 						if (position == 4) {
 							canvasFragment.createColorPicker();
+						} else {
+							canvasFragment.updateCanvas(position);
 						}
-						if (position == 5) {
-							canvasFragment.setText();
-						}
+						layerListAdapter.notifyDataSetChanged();
 					}
 				});
 	}
 
 	public void createRightLayerDrawer() {
 		layerItems = new ArrayList<>();
-		layerItems.add(new Item(Constants.SHAPE_RECT));
-		layerItems.add(new Item(Constants.SHAPE_CIRCLE));
 
 		layerListAdapter = new LayerDrawerListAdapter(getApplicationContext(),
 				layerItems);
@@ -160,9 +157,8 @@ public class MainActivity extends ActionBarActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				drawerLayout.closeDrawers();
 				canvasFragment.canvasViewSetSelectedItem(position);
-				Toast.makeText(getApplicationContext(), "whalla",
-						Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

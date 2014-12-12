@@ -52,7 +52,9 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		holder.title.setText(itemList.get(position).name);
+		Item item = itemList.get(position);
+		holder.title.setText(item.layerName);
+		holder.title.setTextColor(item.color);
 
 		holder.visibilityOnButton.setOnClickListener(new OnClickListener() {
 
@@ -106,7 +108,7 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 
 	private static class ViewHolder {
 		TextView title;
-		//ImageView imgIcon;
+		// ImageView imgIcon;
 		ImageButton visibilityOnButton;
 		ImageButton visibilityOffButton;
 		ImageButton deleteButton;

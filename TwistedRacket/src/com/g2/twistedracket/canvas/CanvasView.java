@@ -2,13 +2,10 @@ package com.g2.twistedracket.canvas;
 
 import java.util.ArrayList;
 
-import org.w3c.dom.Text;
-
 import com.g2.twistedracket.Constants;
 import com.g2.twistedracket.R;
 import com.g2.twistedracket.R.color;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,10 +18,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class CanvasView extends View {
 
@@ -36,12 +29,13 @@ public class CanvasView extends View {
 
 	private ArrayList<Item> itemList;
 	private Path path = new Path();
+
 	private boolean fingerDrawingEnabled = false;
 	private boolean movingEnabled = true;
 	private boolean scaleEnabled = true;
 
 	public int selectedItem = 0;
-	public int sharedColor = color.primary_material_light;
+	public int selectedColor = Color.parseColor("#DA001A");
 	private ScaleGestureDetector scaleGestureDetector;
 
 	private final Bitmap racketBackground = Bitmap.createScaledBitmap(
@@ -57,13 +51,13 @@ public class CanvasView extends View {
 
 		paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.parseColor("#DA001A"));
+		paint.setColor(selectedColor);
 		paint.setTextSize(80f);
 
 		fingerPaint = new Paint();
 		fingerPaint.setAntiAlias(true);
 		fingerPaint.setStrokeWidth(20f);
-		fingerPaint.setColor(sharedColor);
+		fingerPaint.setColor(selectedColor);
 		fingerPaint.setStyle(Paint.Style.STROKE);
 		fingerPaint.setStrokeJoin(Paint.Join.ROUND);
 
@@ -87,20 +81,16 @@ public class CanvasView extends View {
 				item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
 				item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
 			}
-			//
+
+			paint.setColor(item.color);
+
 			switch (item.shapeVersion) {
 			case Constants.SHAPE_RECT:
-
-				// Log.i("MyActivity", "X: " + item.posX);
-				// Log.i("MyActivity", "Y: " + item.posY);
-				// Log.i("MyActivity", "W: " + item.width);
-				// Log.i("MyActivity", "H: " + item.height);
-
 				canvas.drawRect(item.posX, item.posY, item.posX + item.width,
 						item.posY + item.height, paint);
 				break;
 			case Constants.SHAPE_CIRCLE:
-				canvas.drawCircle(item.posX, item.posY, item.width, paint);
+				canvas.drawCircle(item.posX, item.posY, item.width / 2, paint);
 				break;
 
 			case Constants.TEXT:
@@ -120,7 +110,7 @@ public class CanvasView extends View {
 			fingerDrawingEnabled = true;
 		} else {
 			fingerDrawingEnabled = false;
-			itemList.add(new Item(shapeVersion));
+			itemList.add(new Item(shapeVersion, selectedColor));
 		}
 
 		invalidate();
@@ -155,8 +145,14 @@ public class CanvasView extends View {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_MOVE:
 					Item item = itemList.get(selectedItem);
-					item.posX = (int) eventX - (item.width / 2);
-					item.posY = (int) eventY - (item.height / 2);
+					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
+						item.posX = (int) eventX;
+						item.posY = (int) eventY;
+					} else {
+						item.posX = (int) eventX - (item.width / 2);
+						item.posY = (int) eventY - (item.height / 2);
+					}
+
 					break;
 				}
 			}
@@ -166,7 +162,7 @@ public class CanvasView extends View {
 	}
 
 	public void setColor(int color) {
-		sharedColor = color;
+		selectedColor = color;
 		paint.setColor(color);
 		fingerPaint.setColor(color);
 		invalidate();
@@ -187,7 +183,7 @@ public class CanvasView extends View {
 	}
 
 	public void setText(String text) {
-		Item item = new Item(Constants.TEXT);
+		Item item = new Item(Constants.TEXT, selectedColor);
 		item.text = text;
 		itemList.add(item);
 		invalidate();
