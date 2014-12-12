@@ -2,6 +2,7 @@ package com.g2.twistedracket;
 
 import java.util.ArrayList;
 
+import com.g2.twistedracket.CanvasFragment.ActivityCommunication;
 import com.g2.twistedracket.canvas.Item;
 import com.g2.twistedracket.layerdrawer.LayerDrawerListAdapter;
 import com.g2.twistedracket.navdrawer.NavigationDrawerItem;
@@ -29,12 +30,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements
+		ActivityCommunication {
 
 	private DrawerLayout drawerLayout;
 	private ListView navigationDrawerListView;
-	private ListView layerListView;
+	public ListView layerListView;
 	private ActionBarDrawerToggle actionBarDrawerToggle;
 
 	// slide menu items
@@ -135,9 +138,8 @@ public class MainActivity extends ActionBarActivity {
 						if (position == 4) {
 							canvasFragment.createColorPicker();
 						}
-						if(position ==5)
-						{
-
+						if (position == 5) {
+							canvasFragment.setText();
 						}
 					}
 				});
@@ -146,6 +148,7 @@ public class MainActivity extends ActionBarActivity {
 	public void createRightLayerDrawer() {
 		layerItems = new ArrayList<>();
 		layerItems.add(new Item(Constants.SHAPE_RECT));
+		layerItems.add(new Item(Constants.SHAPE_CIRCLE));
 
 		layerListAdapter = new LayerDrawerListAdapter(getApplicationContext(),
 				layerItems);
@@ -157,12 +160,12 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// canvasFragment.updateCanvas(position);
-				// drawerLayout.closeDrawers();
+				canvasFragment.canvasViewSetSelectedItem(position);
+				Toast.makeText(getApplicationContext(), "whalla",
+						Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -201,6 +204,11 @@ public class MainActivity extends ActionBarActivity {
 			return;
 		}
 		super.onBackPressed();
+	}
+
+	@Override
+	public ArrayList<Item> getArrayList() {
+		return layerItems;
 	}
 
 }

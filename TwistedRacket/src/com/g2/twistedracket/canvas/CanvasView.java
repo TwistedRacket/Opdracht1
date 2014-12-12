@@ -40,7 +40,7 @@ public class CanvasView extends View {
 	private boolean movingEnabled = true;
 	private boolean scaleEnabled = true;
 
-	private int selectedItem = 0;
+	public int selectedItem = 0;
 	public int sharedColor = color.primary_material_light;
 	private ScaleGestureDetector scaleGestureDetector;
 
@@ -67,10 +67,12 @@ public class CanvasView extends View {
 		fingerPaint.setStyle(Paint.Style.STROKE);
 		fingerPaint.setStrokeJoin(Paint.Join.ROUND);
 
-		itemList = new ArrayList<>();
-
 		scaleGestureDetector = new ScaleGestureDetector(context,
 				new ScaleListener());
+	}
+
+	public void setUp(ArrayList<Item> itemList) {
+		this.itemList = itemList;
 	}
 
 	@Override
@@ -102,8 +104,7 @@ public class CanvasView extends View {
 				break;
 
 			case Constants.TEXT:
-
-				canvas.drawText("", item.posX, item.posY, paint);
+				canvas.drawText(item.text, item.posX, item.posY, paint);
 				break;
 			}
 			pos++;
@@ -147,8 +148,6 @@ public class CanvasView extends View {
 				case MotionEvent.ACTION_MOVE:
 					path.lineTo(eventX, eventY);
 					break;
-				case MotionEvent.ACTION_UP:
-					break;
 				default:
 					return false;
 				}
@@ -158,8 +157,6 @@ public class CanvasView extends View {
 					Item item = itemList.get(selectedItem);
 					item.posX = (int) eventX - (item.width / 2);
 					item.posY = (int) eventY - (item.height / 2);
-					break;
-				case MotionEvent.ACTION_UP:
 					break;
 				}
 			}
@@ -188,15 +185,11 @@ public class CanvasView extends View {
 			return true;
 		}
 	}
-	public void setText() {
-		Dialog d = new Dialog(getContext());
-		d.setTitle("Set text");
-		EditText t = new EditText(getContext());
-		t.setSingleLine(true);
-		Button b = new Button(getContext());
-		b.setText("OK");
-		d.setContentView(t);
-		d.show();	
-	}
 
+	public void setText(String text) {
+		Item item = new Item(Constants.TEXT);
+		item.text = text;
+		itemList.add(item);
+		invalidate();
+	}
 }

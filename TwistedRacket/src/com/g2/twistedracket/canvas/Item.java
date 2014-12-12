@@ -13,6 +13,7 @@ public class Item {
 	public int colorInt;
 	
 	public String name = "Layer";
+	public String text;
 
 	public Item(int shapeItem) {
 		this.shapeVersion = shapeItem;
