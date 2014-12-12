@@ -11,6 +11,8 @@ public class Item {
 	public int width = Constants.DEFAULT_ITEM_WIDTH;
 	public int height = Constants.DEFAULT_ITEM_HEIGHT;
 	public int colorInt;
+	
+	public String name = "Layer";
 
 	public Item(int shapeItem) {
 		this.shapeVersion = shapeItem;

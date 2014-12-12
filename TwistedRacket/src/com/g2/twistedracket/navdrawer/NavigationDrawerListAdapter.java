@@ -3,8 +3,6 @@ package com.g2.twistedracket.navdrawer;
 import java.util.ArrayList;
 
 import com.g2.twistedracket.R;
-import com.g2.twistedracket.R.id;
-import com.g2.twistedracket.R.layout;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,7 +27,7 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 		this.navigationDrawerItems = navigationDrawerItems;
 		this.typeFace = Typeface.createFromAsset(context.getAssets(),
 				"fonts/Roboto-Medium.ttf");
-		this.holder = new ViewHolder();
+		//this.holder = new ViewHolder();
 	}
 
 	@Override
@@ -37,11 +35,11 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(
-					R.layout.navigation_drawer_list_item, parent, false);
+			convertView = inflater.inflate(R.layout.navigation_drawer_list_item, parent, false);
 
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.title);
+			//holder.title = (TextView) convertView.findViewById(R.id.layerName);
 			holder.imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 
 			convertView.setTag(holder);

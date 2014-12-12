@@ -66,15 +66,6 @@ public class CanvasView extends View {
 		fingerPaint.setColor(sharedColor);
 		fingerPaint.setStyle(Paint.Style.STROKE);
 		fingerPaint.setStrokeJoin(Paint.Join.ROUND);
-		
-//		textPaint = new Paint();
-//		textPaint.setAntiAlias(true);
-//		
-//
-//		fingerPaint.setColor(sharedColor);
-//		fingerPaint.setStyle(Paint.Style.STROKE);
-//		fingerPaint.setStrokeJoin(Paint.Join.ROUND);
-
 
 		itemList = new ArrayList<>();
 
@@ -167,7 +158,6 @@ public class CanvasView extends View {
 					Item item = itemList.get(selectedItem);
 					item.posX = (int) eventX - (item.width / 2);
 					item.posY = (int) eventY - (item.height / 2);
-
 					break;
 				case MotionEvent.ACTION_UP:
 					break;

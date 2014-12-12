@@ -8,7 +8,6 @@ import com.g2.twistedracket.canvas.CanvasView;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;

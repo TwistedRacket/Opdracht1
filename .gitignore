@@ -13,3 +13,9 @@ TwistedRacket/AmbilWarna/bin/ambilwarna.jar
 TwistedRacket/AmbilWarna/bin/classes/yuku/ambilwarna/AmbilWarnaDialog$1.class
 *.class
 *.jar
+*.class
+*.class
+*.class
+*.jar
+TwistedRacket/AmbilWarna/bin/ambilwarna.jar
+TwistedRacket/bin/resources.ap_
