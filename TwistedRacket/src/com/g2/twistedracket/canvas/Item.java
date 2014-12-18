@@ -1,5 +1,7 @@
 package com.g2.twistedracket.canvas;
 
+import android.graphics.Bitmap;
+
 import com.g2.twistedracket.Constants;
 
 public class Item {
@@ -14,6 +16,7 @@ public class Item {
 
 	public String layerName;
 	public String text;
+	public Bitmap bitmap;
 
 	private static int itemNumber = 1;
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.g2.twistedracket.Constants;
 import com.g2.twistedracket.R;
-import com.g2.twistedracket.R.color;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -38,22 +37,23 @@ public class CanvasView extends View {
 
 	public int selectedItem = 0;
 	public int selectedColor = Color.parseColor("#DA001A");
-	private ScaleGestureDetector scaleGestureDetector;
+	private final ScaleGestureDetector scaleGestureDetector;
 
-	private final Bitmap racketBackground = Bitmap.createScaledBitmap(
-			BitmapFactory.decodeResource(getResources(),
-					R.drawable.tennis_racket_full_black), 1080, 1700, true);
-
-	private final Bitmap racketBackgroundInverted = Bitmap.createScaledBitmap(
-			BitmapFactory.decodeResource(getResources(),
-					R.drawable.tennis_racket_full_black_invert), 1080, 1700,
-			true);
-
-	protected Bitmap b;
+	private final Bitmap racketBackground;
+	private final Bitmap racketBackgroundInverted;
 
 	public CanvasView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
+
+		this.racketBackground = Bitmap.createScaledBitmap(BitmapFactory
+				.decodeResource(getResources(),
+						R.drawable.tennis_racket_full_black), Utils
+				.getWidth(context), Utils.getHeight(context), true);
+		this.racketBackgroundInverted = Bitmap.createScaledBitmap(BitmapFactory
+				.decodeResource(getResources(),
+						R.drawable.tennis_racket_full_black_invert), Utils
+				.getWidth(context), Utils.getHeight(context), true);
 
 		paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
@@ -106,9 +106,11 @@ public class CanvasView extends View {
 					canvas.drawCircle(item.posX, item.posY, item.width / 2,
 							paint);
 					break;
-
 				case Constants.TEXT:
 					canvas.drawText(item.text, item.posX, item.posY, paint);
+					break;
+				case Constants.PHOTO:
+					canvas.drawBitmap(item.bitmap, 0, 0, paint);
 					break;
 				}
 				pos++;
@@ -117,9 +119,6 @@ public class CanvasView extends View {
 
 		canvas.drawPath(path, fingerPaint);
 
-		if (b != null)
-			canvas.drawBitmap(b, 0, 0, paint);
-
 		if (canShowRacket) {
 			if (isInverted) {
 				canvas.drawBitmap(racketBackgroundInverted, 0, 0, paint);
@@ -127,7 +126,6 @@ public class CanvasView extends View {
 				canvas.drawBitmap(racketBackground, 0, 0, paint);
 			}
 		}
-
 	}
 
 	public void addItemToCanvas(int shapeVersion) {
@@ -142,8 +140,24 @@ public class CanvasView extends View {
 		invalidate();
 	}
 
+	public void setText(String text) {
+		Item item = new Item(Constants.TEXT, selectedColor);
+		item.text = text;
+		itemList.add(item);
+		invalidate();
+	}
+
 	public void addPicture(Bitmap bitmap) {
-		this.b = bitmap;
+		Item item = new Item(Constants.PHOTO, selectedColor);
+		item.bitmap = bitmap;
+		itemList.add(item);
+		invalidate();
+	}
+
+	public void setColor(int color) {
+		selectedColor = color;
+		paint.setColor(color);
+		fingerPaint.setColor(color);
 		invalidate();
 	}
 
@@ -192,13 +206,6 @@ public class CanvasView extends View {
 		return true;
 	}
 
-	public void setColor(int color) {
-		selectedColor = color;
-		paint.setColor(color);
-		fingerPaint.setColor(color);
-		invalidate();
-	}
-
 	private class ScaleListener extends
 			ScaleGestureDetector.SimpleOnScaleGestureListener {
 		@Override
@@ -211,12 +218,5 @@ public class CanvasView extends View {
 			invalidate();
 			return true;
 		}
-	}
-
-	public void setText(String text) {
-		Item item = new Item(Constants.TEXT, selectedColor);
-		item.text = text;
-		itemList.add(item);
-		invalidate();
 	}
 }

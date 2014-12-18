@@ -3,10 +3,11 @@ package com.g2.twistedracket;
 import java.util.ArrayList;
 
 import com.g2.twistedracket.canvas.Item;
-import com.g2.twistedracket.layerdrawer.LayerDrawerListAdapter;
-import com.g2.twistedracket.navdrawer.ItemListAdapter;
-import com.g2.twistedracket.navdrawer.NavigationDrawerItem;
-import com.g2.twistedracket.navdrawer.NavigationDrawerListAdapter;
+import com.g2.twistedracket.canvas.Utils;
+import com.g2.twistedracket.drawer.ItemListAdapter;
+import com.g2.twistedracket.drawer.LayerDrawerListAdapter;
+import com.g2.twistedracket.drawer.NavigationDrawerItem;
+import com.g2.twistedracket.drawer.NavigationDrawerListAdapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,10 +16,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.provider.Telephony.CanonicalAddressesColumns;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,21 +37,24 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.PopupWindow;
-import android.widget.Toast;
+import android.widget.PopupWindow.OnDismissListener;
+
+;
 
 public class MainActivity extends ActionBarActivity implements
 		CanvasFragment.ActivityCommunication {
 
 	private DrawerLayout drawerLayout;
 	private ListView navigationDrawerListView;
-	public ListView layerListView;
+	private ListView layerListView;
 	private ActionBarDrawerToggle actionBarDrawerToggle;
 
 	// slide menu items
 	private ArrayList<NavigationDrawerItem> navDrawerItems;
-	private ArrayList<Item> layerItems;
-	private ArrayList<NavigationDrawerItem> itemPopupList;
-	private NavigationDrawerListAdapter adapter;
+	private ArrayList<Item> layerItemList;
+	private ArrayList<NavigationDrawerItem> popupItemList;
+
+	private NavigationDrawerListAdapter navigationListAdapter;
 	private LayerDrawerListAdapter layerListAdapter;
 	private ItemListAdapter itemListAdapter;
 	private Toolbar toolbar;
@@ -83,7 +85,6 @@ public class MainActivity extends ActionBarActivity implements
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.add(R.id.fragmentContainer, new CanvasFragment());
 		ft.commit();
-
 	}
 
 	@Override
@@ -106,17 +107,14 @@ public class MainActivity extends ActionBarActivity implements
 		navigationDrawerListView = (ListView) findViewById(R.id.left_menu);
 
 		navDrawerItems = new ArrayList<NavigationDrawerItem>();
-
-		// adding nav drawer items to array
 		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0],
 				navMenuIconList.getResourceId(0, -1)));
-
 		navMenuIconList.recycle();
 
 		// setting the nav drawer list adapter
-		adapter = new NavigationDrawerListAdapter(getApplicationContext(),
-				navDrawerItems);
-		navigationDrawerListView.setAdapter(adapter);
+		navigationListAdapter = new NavigationDrawerListAdapter(
+				getApplicationContext(), navDrawerItems);
+		navigationDrawerListView.setAdapter(navigationListAdapter);
 
 		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
 				toolbar, R.string.app_name, R.string.app_name) {
@@ -137,15 +135,13 @@ public class MainActivity extends ActionBarActivity implements
 		actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 		navigationDrawerListView
 				.setOnItemClickListener(new OnItemClickListener() {
-
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 
 						drawerLayout.closeDrawers();
 						if (position == 0) {
-
-							createConnectionLostPopupWindow();
+							createNewItemPopupWindow();
 							return;
 						}
 					}
@@ -153,15 +149,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void createRightLayerDrawer() {
-		layerItems = new ArrayList<>();
+		layerItemList = new ArrayList<>();
 
 		layerListAdapter = new LayerDrawerListAdapter(this,
-				getApplicationContext(), layerItems);
+				getApplicationContext(), layerItemList);
 
 		layerListView = (ListView) findViewById(R.id.right_menu);
 		layerListView.setAdapter(layerListAdapter);
 		layerListView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -173,7 +168,6 @@ public class MainActivity extends ActionBarActivity implements
 		CheckBox checkBoxInverted = (CheckBox) findViewById(R.id.invertedRacket);
 		checkBoxInverted
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
@@ -184,7 +178,6 @@ public class MainActivity extends ActionBarActivity implements
 
 		CheckBox checkBox = (CheckBox) findViewById(R.id.showRacketCheckBox);
 		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
@@ -192,14 +185,9 @@ public class MainActivity extends ActionBarActivity implements
 				canvasFragment.canvasView.invalidate();
 			}
 		});
-
 	}
 
-	public void invalidateCanvas() {
-		canvasFragment.canvasView.invalidate();
-	}
-
-	public void createConnectionLostPopupWindow() {
+	private void createNewItemPopupWindow() {
 		dimmedBackground.getForeground().setAlpha(200);
 
 		LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
@@ -219,36 +207,21 @@ public class MainActivity extends ActionBarActivity implements
 		navMenuTitleList = getResources().getStringArray(
 				R.array.navigation_drawer_items_popup);
 
-		itemPopupList = new ArrayList<NavigationDrawerItem>();
+		popupItemList = new ArrayList<NavigationDrawerItem>();
 
 		// adding nav drawer items to array
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[0],
-				navMenuIconList.getResourceId(0, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[1],
-				navMenuIconList.getResourceId(1, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[2],
-				navMenuIconList.getResourceId(2, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[3],
-				navMenuIconList.getResourceId(3, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[4],
-				navMenuIconList.getResourceId(4, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[5],
-				navMenuIconList.getResourceId(5, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[6],
-				navMenuIconList.getResourceId(6, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[7],
-				navMenuIconList.getResourceId(7, -1)));
-		itemPopupList.add(new NavigationDrawerItem(navMenuTitleList[8],
-				navMenuIconList.getResourceId(8, -1)));
+		for (int i = 0; i < 9; i++) {
+			popupItemList.add(new NavigationDrawerItem(navMenuTitleList[i],
+					navMenuIconList.getResourceId(i, -1)));
+		}
 
 		navMenuIconList.recycle();
 
-		ListView listView = (ListView) popupView.findViewById(R.id.item_menu);
-
 		itemListAdapter = new ItemListAdapter(getApplicationContext(),
-				itemPopupList);
-		listView.setAdapter(itemListAdapter);
+				popupItemList);
 
+		ListView listView = (ListView) popupView.findViewById(R.id.item_menu);
+		listView.setAdapter(itemListAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -264,16 +237,25 @@ public class MainActivity extends ActionBarActivity implements
 				}
 				layerListAdapter.notifyDataSetChanged();
 				popupWindow.dismiss();
-				dimmedBackground.getForeground().setAlpha(0);
 			}
 		});
 
 		popupWindow.showAtLocation(findViewById(R.id.activity_main_name),
 				Gravity.CENTER, 0, 0);
 
+		popupWindow.setOnDismissListener(new OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				dimmedBackground.getForeground().setAlpha(0);
+			}
+		});
 	}
 
-	public void launchCamera() {
+	public void invalidateCanvas() {
+		canvasFragment.canvasView.invalidate();
+	}
+
+	private void launchCamera() {
 		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
 		if (intent.resolveActivity(getPackageManager()) != null) {
 			startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
@@ -285,25 +267,10 @@ public class MainActivity extends ActionBarActivity implements
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 			Bundle extra = data.getExtras();
 			Bitmap imageBitmap = (Bitmap) extra.get("data");
-			imageBitmap = getResizedBitmap(imageBitmap, 1920, 1080);
+			imageBitmap = Utils.getResizedBitmap(imageBitmap, 1920, 1080);
 			canvasFragment.canvasView.addPicture(imageBitmap);
+			layerListAdapter.notifyDataSetChanged();
 		}
-	}
-
-	public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-		int width = bm.getWidth();
-		int height = bm.getHeight();
-		float scaleWidth = ((float) newWidth) / width;
-		float scaleHeight = ((float) newHeight) / height;
-		// CREATE A MATRIX FOR THE MANIPULATION
-		Matrix matrix = new Matrix();
-		// RESIZE THE BIT MAP
-		matrix.postScale(scaleWidth, scaleHeight);
-
-		// "RECREATE" THE NEW BITMAP
-		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
-				matrix, false);
-		return resizedBitmap;
 	}
 
 	@Override
@@ -337,12 +304,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onBackPressed() {
-		if (popupWindow.isShowing()) {
-			popupWindow.dismiss();
-			dimmedBackground.getForeground().setAlpha(0);
-			return;
-		}
-
 		if (drawerLayout.isDrawerOpen(Gravity.START)
 				|| drawerLayout.isDrawerOpen(Gravity.END)) {
 			drawerLayout.closeDrawers();
@@ -354,7 +315,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public ArrayList<Item> getArrayList() {
-		return layerItems;
+		return layerItemList;
 	}
 
 }

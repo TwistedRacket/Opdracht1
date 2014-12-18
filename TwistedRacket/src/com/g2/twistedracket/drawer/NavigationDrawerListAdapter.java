@@ -1,4 +1,4 @@
-package com.g2.twistedracket.navdrawer;
+package com.g2.twistedracket.drawer;
 
 import java.util.ArrayList;
 
