@@ -10,5 +10,6 @@
     <color name="gray">#26272b</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="itemListColor">#EFEFEF</color>
 
 </resources>

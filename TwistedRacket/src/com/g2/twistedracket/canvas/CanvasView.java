@@ -33,6 +33,8 @@ public class CanvasView extends View {
 	private boolean fingerDrawingEnabled = false;
 	private boolean movingEnabled = true;
 	private boolean scaleEnabled = true;
+	public boolean canShowRacket = true;
+	public boolean isInverted = false;
 
 	public int selectedItem = 0;
 	public int selectedColor = Color.parseColor("#DA001A");
@@ -42,8 +44,10 @@ public class CanvasView extends View {
 			BitmapFactory.decodeResource(getResources(),
 					R.drawable.tennis_racket_full_black), 1080, 1700, true);
 
-	private final Bitmap grayBackground = BitmapFactory.decodeResource(
-			getResources(), R.drawable.tennisracketsnaart);
+	private final Bitmap racketBackgroundInverted = Bitmap.createScaledBitmap(
+			BitmapFactory.decodeResource(getResources(),
+					R.drawable.tennis_racket_full_black_invert), 1080, 1700,
+			true);
 
 	public CanvasView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -52,7 +56,7 @@ public class CanvasView extends View {
 		paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
 		paint.setColor(selectedColor);
-		paint.setTextSize(80f);
+		paint.setTextSize(160f);
 
 		fingerPaint = new Paint();
 		fingerPaint.setAntiAlias(true);
@@ -73,7 +77,13 @@ public class CanvasView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// canvas.drawColor(color.black);
+		if (canShowRacket) {
+			if (isInverted) {
+				canvas.drawColor(Color.WHITE);
+			} else {
+				canvas.drawColor(Color.BLACK);
+			}
+		}
 
 		int pos = 0;
 		for (Item item : itemList) {
@@ -104,12 +114,20 @@ public class CanvasView extends View {
 		}
 
 		canvas.drawPath(path, fingerPaint);
-		// canvas.drawBitmap(racketBackground, 0, 0, paint);
+
+		if (canShowRacket) {
+			if (isInverted) {
+				canvas.drawBitmap(racketBackgroundInverted, 0, 0, paint);
+			} else {
+				canvas.drawBitmap(racketBackground, 0, 0, paint);
+			}
+		}
+
 	}
 
 	public void addItemToCanvas(int shapeVersion) {
 		Log.i("MyActivity", "Int: " + shapeVersion);
-		if (shapeVersion == 2) {
+		if (shapeVersion == 4) {
 			fingerDrawingEnabled = true;
 		} else {
 			fingerDrawingEnabled = false;
@@ -128,10 +146,11 @@ public class CanvasView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (!itemList.isEmpty()) {
+		float eventX = event.getX();
+		float eventY = event.getY();
+
+		if (!itemList.isEmpty() && eventX > 100 && eventX < 980) {
 			scaleGestureDetector.onTouchEvent(event);
-			float eventX = event.getX();
-			float eventY = event.getY();
 
 			if (fingerDrawingEnabled) {
 				switch (event.getAction()) {
@@ -155,7 +174,6 @@ public class CanvasView extends View {
 						item.posX = (int) eventX - (item.width / 2);
 						item.posY = (int) eventY - (item.height / 2);
 					}
-
 					break;
 				}
 			}

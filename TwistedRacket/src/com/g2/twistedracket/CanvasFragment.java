@@ -54,9 +54,9 @@ public class CanvasFragment extends Fragment {
 
 	protected void updateCanvas(int version) {
 		Log.i("MyActivity", "" + version);
-		if (version == 3) {
+		if (version == 8) {
 			canvasView.clearCanvas();
-		} else if (version == 5) {
+		} else if (version == 3) {
 			addTextItem();
 		} else {
 			canvasView.addItemToCanvas(version);

@@ -7,17 +7,26 @@
     <string-array name="navigation_drawer_items_title">
         <item>Rectangle</item>
         <item>Circle</item>
-        <item>Finger</item>
-        <item>Clear</item>
-        <item>Pick Color</item>
+        <item>Triangle</item>
         <item>Text</item>
+        <item>Draw</item>
+        <item>Image</item>
+        <item>Camera</item>
+        <item>ColorPicker</item>
+        <item>Clear</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
     <array name="navigation_drawer_icons">
-        <item>@android:drawable/ic_menu_search</item>
-        <item>@android:drawable/ic_menu_mylocation</item>
-        <item>@android:drawable/ic_menu_search</item>
+        <item>@drawable/ic_square_grey600_36dp</item>
+        <item>@drawable/ic_circle_grey600_36dp</item>
+        <item>@drawable/ic_triangle_grey600_36dp</item>
+        <item>@drawable/ic_edit_grey600_36dp</item>
+        <item>@drawable/ic_brush_grey600_36dp</item>
+        <item>@drawable/ic_collections_grey600_36dp</item>
+        <item>@drawable/ic_camera_alt_grey600_36dp</item>
+        <item>@drawable/ic_palette_grey600_36dp</item>
+        <item>@drawable/ic_cancel_grey600_36dp</item>
     </array>
 
 </resources>

@@ -1,35 +1,66 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dimmedBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:foreground="@drawable/dimmed_background_rectangle" >
 
-    <include layout="@layout/toolbar" />
-
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <LinearLayout
+        android:id="@+id/activity_main_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-        <FrameLayout
-            android:id="@+id/fragmentContainer"
+        <include layout="@layout/toolbar" />
+
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
 
-        <ListView
-            android:id="@+id/left_menu"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:background="@color/gray"
-            android:choiceMode="singleChoice" />
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <ListView
-            android:id="@+id/right_menu"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/gray"
-            android:choiceMode="singleChoice" />
-    </android.support.v4.widget.DrawerLayout>
+            <ListView
+                android:id="@+id/left_menu"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@color/gray"
+                android:choiceMode="singleChoice" />
 
-</LinearLayout>
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right" >
+
+                <ListView
+                    android:id="@+id/right_menu"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/gray"
+                    android:choiceMode="singleChoice" />
+
+                <CheckBox
+                    android:id="@+id/showRacketCheckBox"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:checked="true"
+                    android:text="Show Racket" />
+
+                <CheckBox
+                    android:id="@+id/invertedRacket"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/showRacketCheckBox"
+                    android:checked="false"
+                    android:text="Invert Racket Colors" />
+            </RelativeLayout>
+        </android.support.v4.widget.DrawerLayout>
+    </LinearLayout>
+
+</FrameLayout>
