@@ -49,6 +49,8 @@ public class CanvasView extends View {
 					R.drawable.tennis_racket_full_black_invert), 1080, 1700,
 			true);
 
+	protected Bitmap b;
+
 	public CanvasView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
@@ -115,6 +117,9 @@ public class CanvasView extends View {
 
 		canvas.drawPath(path, fingerPaint);
 
+		if (b != null)
+			canvas.drawBitmap(b, 0, 0, paint);
+
 		if (canShowRacket) {
 			if (isInverted) {
 				canvas.drawBitmap(racketBackgroundInverted, 0, 0, paint);
@@ -134,6 +139,11 @@ public class CanvasView extends View {
 			itemList.add(new Item(shapeVersion, selectedColor));
 		}
 
+		invalidate();
+	}
+
+	public void addPicture(Bitmap bitmap) {
+		this.b = bitmap;
 		invalidate();
 	}
 

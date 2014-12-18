@@ -19,8 +19,10 @@ public final class R {
     public static final class array {
         /**  Nav Drawer List Item Icons 
          */
-        public static final int navigation_drawer_icons=0x7f0c0001;
-        public static final int navigation_drawer_items_title=0x7f0c0000;
+        public static final int navigation_drawer_icons=0x7f0c0002;
+        public static final int navigation_drawer_items_popup=0x7f0c0000;
+        public static final int navigation_drawer_items_title=0x7f0c0001;
+        public static final int navigation_drawer_leftmenu_icons=0x7f0c0003;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -1668,26 +1670,27 @@ containing a value of this type.
         public static final int ambilwarna_cursor=0x7f020037;
         public static final int ambilwarna_hue=0x7f020038;
         public static final int ambilwarna_target=0x7f020039;
-        public static final int dimmed_background_rectangle=0x7f02003a;
-        public static final int ic_brush_grey600_36dp=0x7f02003b;
-        public static final int ic_camera_alt_grey600_36dp=0x7f02003c;
-        public static final int ic_cancel_grey600_36dp=0x7f02003d;
-        public static final int ic_circle_grey600_36dp=0x7f02003e;
-        public static final int ic_collections_grey600_36dp=0x7f02003f;
-        public static final int ic_delete_grey600_24dp=0x7f020040;
-        public static final int ic_edit_grey600_36dp=0x7f020041;
-        public static final int ic_launcher=0x7f020042;
-        public static final int ic_palette_grey600_36dp=0x7f020043;
-        public static final int ic_square_grey600_36dp=0x7f020044;
-        public static final int ic_triangle_grey600_36dp=0x7f020045;
-        public static final int ic_visibility_grey600_24dp=0x7f020046;
-        public static final int ic_visibility_off_grey600_24dp=0x7f020047;
-        public static final int raket=0x7f020048;
-        public static final int tennis_racket_full_black=0x7f020049;
-        public static final int tennis_racket_full_black_invert=0x7f02004a;
-        public static final int tennisracket2=0x7f02004b;
-        public static final int tennisracket3=0x7f02004c;
-        public static final int tennisracketsnaart=0x7f02004d;
+        public static final int app_icon_lelijk=0x7f02003a;
+        public static final int dimmed_background_rectangle=0x7f02003b;
+        public static final int ic_brush_grey600_36dp=0x7f02003c;
+        public static final int ic_camera_alt_grey600_36dp=0x7f02003d;
+        public static final int ic_cancel_grey600_36dp=0x7f02003e;
+        public static final int ic_circle_grey600_36dp=0x7f02003f;
+        public static final int ic_collections_grey600_36dp=0x7f020040;
+        public static final int ic_delete_grey600_24dp=0x7f020041;
+        public static final int ic_edit_grey600_36dp=0x7f020042;
+        public static final int ic_launcher=0x7f020043;
+        public static final int ic_palette_grey600_36dp=0x7f020044;
+        public static final int ic_square_grey600_36dp=0x7f020045;
+        public static final int ic_triangle_grey600_36dp=0x7f020046;
+        public static final int ic_visibility_grey600_24dp=0x7f020047;
+        public static final int ic_visibility_off_grey600_24dp=0x7f020048;
+        public static final int raket=0x7f020049;
+        public static final int tennis_racket_full_black=0x7f02004a;
+        public static final int tennis_racket_full_black_invert=0x7f02004b;
+        public static final int tennisracket2=0x7f02004c;
+        public static final int tennisracket3=0x7f02004d;
+        public static final int tennisracketsnaart=0x7f02004e;
     }
     public static final class id {
         public static final int action_bar=0x7f090031;

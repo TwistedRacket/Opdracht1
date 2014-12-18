@@ -11,6 +11,7 @@ import com.g2.twistedracket.canvas.Item;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,5 +106,6 @@ public class CanvasFragment extends Fragment {
 
 	protected interface ActivityCommunication {
 		public ArrayList<Item> getArrayList();
+
 	}
 }

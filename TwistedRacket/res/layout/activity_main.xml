@@ -27,7 +27,7 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:background="@color/gray"
+                android:background="@color/itemListColor"
                 android:choiceMode="singleChoice" />
 
             <RelativeLayout
@@ -41,11 +41,12 @@
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
-                    android:background="@color/gray"
+                    android:background="@color/itemListColor"
                     android:choiceMode="singleChoice" />
 
                 <CheckBox
                     android:id="@+id/showRacketCheckBox"
+                    style="@style/styleNavigationDrawerTextViewHeader"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -54,6 +55,7 @@
 
                 <CheckBox
                     android:id="@+id/invertedRacket"
+                    style="@style/styleNavigationDrawerTextViewHeader"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/showRacketCheckBox"

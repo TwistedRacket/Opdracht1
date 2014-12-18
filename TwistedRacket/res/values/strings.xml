@@ -4,7 +4,7 @@
     <string name="app_name">TwistedRacket</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="navigation_drawer_items_title">
+    <string-array name="navigation_drawer_items_popup">
         <item>Rectangle</item>
         <item>Circle</item>
         <item>Triangle</item>
@@ -14,6 +14,10 @@
         <item>Camera</item>
         <item>ColorPicker</item>
         <item>Clear</item>
+    </string-array>
+    
+        <string-array name="navigation_drawer_items_title">
+        <item>New shape</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -28,5 +32,10 @@
         <item>@drawable/ic_palette_grey600_36dp</item>
         <item>@drawable/ic_cancel_grey600_36dp</item>
     </array>
+    
+        <array name="navigation_drawer_leftmenu_icons">
+        <item>@drawable/ic_launcher</item>
+    </array>
+    
 
 </resources>

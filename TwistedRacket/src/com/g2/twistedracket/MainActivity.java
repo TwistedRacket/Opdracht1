@@ -2,7 +2,6 @@ package com.g2.twistedracket;
 
 import java.util.ArrayList;
 
-import com.g2.twistedracket.CanvasFragment.ActivityCommunication;
 import com.g2.twistedracket.canvas.Item;
 import com.g2.twistedracket.layerdrawer.LayerDrawerListAdapter;
 import com.g2.twistedracket.navdrawer.ItemListAdapter;
@@ -12,10 +11,14 @@ import com.g2.twistedracket.navdrawer.NavigationDrawerListAdapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.Telephony.CanonicalAddressesColumns;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,7 +41,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
-		ActivityCommunication {
+		CanvasFragment.ActivityCommunication {
 
 	private DrawerLayout drawerLayout;
 	private ListView navigationDrawerListView;
@@ -59,6 +62,8 @@ public class MainActivity extends ActionBarActivity implements
 	private CanvasFragment canvasFragment;
 
 	private PopupWindow popupWindow;
+
+	static final int REQUEST_IMAGE_CAPTURE = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements
 		TypedArray navMenuIconList;
 
 		navMenuIconList = getResources().obtainTypedArray(
-				R.array.navigation_drawer_icons);
+				R.array.navigation_drawer_leftmenu_icons);
 		navMenuTitleList = getResources().getStringArray(
 				R.array.navigation_drawer_items_title);
 
@@ -105,16 +110,6 @@ public class MainActivity extends ActionBarActivity implements
 		// adding nav drawer items to array
 		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0],
 				navMenuIconList.getResourceId(0, -1)));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[1],
-				navMenuIconList.getResourceId(1, -1)));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[2],
-				navMenuIconList.getResourceId(2, -1)));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[3],
-				navMenuIconList.getResourceId(2, -1)));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[4],
-				navMenuIconList.getResourceId(2, -1)));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[5],
-				navMenuIconList.getResourceId(2, -1)));
 
 		navMenuIconList.recycle();
 
@@ -153,15 +148,6 @@ public class MainActivity extends ActionBarActivity implements
 							createConnectionLostPopupWindow();
 							return;
 						}
-						//
-						drawerLayout.closeDrawers();
-						if (position == 4) {
-							canvasFragment.createColorPicker();
-						} else {
-							canvasFragment.updateCanvas(position);
-						}
-						layerListAdapter.notifyDataSetChanged();
-
 					}
 				});
 	}
@@ -231,7 +217,7 @@ public class MainActivity extends ActionBarActivity implements
 		navMenuIconList = getResources().obtainTypedArray(
 				R.array.navigation_drawer_icons);
 		navMenuTitleList = getResources().getStringArray(
-				R.array.navigation_drawer_items_title);
+				R.array.navigation_drawer_items_popup);
 
 		itemPopupList = new ArrayList<NavigationDrawerItem>();
 
@@ -271,6 +257,8 @@ public class MainActivity extends ActionBarActivity implements
 				drawerLayout.closeDrawers();
 				if (position == 7) {
 					canvasFragment.createColorPicker();
+				} else if (position == 6) {
+					launchCamera();
 				} else {
 					canvasFragment.updateCanvas(position);
 				}
@@ -283,6 +271,39 @@ public class MainActivity extends ActionBarActivity implements
 		popupWindow.showAtLocation(findViewById(R.id.activity_main_name),
 				Gravity.CENTER, 0, 0);
 
+	}
+
+	public void launchCamera() {
+		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+		if (intent.resolveActivity(getPackageManager()) != null) {
+			startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+			Bundle extra = data.getExtras();
+			Bitmap imageBitmap = (Bitmap) extra.get("data");
+			imageBitmap = getResizedBitmap(imageBitmap, 1920, 1080);
+			canvasFragment.canvasView.addPicture(imageBitmap);
+		}
+	}
+
+	public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+		int width = bm.getWidth();
+		int height = bm.getHeight();
+		float scaleWidth = ((float) newWidth) / width;
+		float scaleHeight = ((float) newHeight) / height;
+		// CREATE A MATRIX FOR THE MANIPULATION
+		Matrix matrix = new Matrix();
+		// RESIZE THE BIT MAP
+		matrix.postScale(scaleWidth, scaleHeight);
+
+		// "RECREATE" THE NEW BITMAP
+		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+				matrix, false);
+		return resizedBitmap;
 	}
 
 	@Override
