@@ -2,6 +2,7 @@ package com.g2.twistedracket.layerdrawer;
 
 import java.util.ArrayList;
 
+import com.g2.twistedracket.MainActivity;
 import com.g2.twistedracket.R;
 import com.g2.twistedracket.canvas.Item;
 
@@ -12,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.View.OnClickListener;
 
 public class LayerDrawerListAdapter extends BaseAdapter {
@@ -22,10 +21,13 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 	private Context context;
 	private ArrayList<Item> itemList;
 	private ViewHolder holder;
+	private MainActivity activity;
 
-	public LayerDrawerListAdapter(Context context, ArrayList<Item> itemList) {
+	public LayerDrawerListAdapter(MainActivity activity, Context context,
+			ArrayList<Item> itemList) {
 		this.context = context;
 		this.itemList = itemList;
+		this.activity = activity;
 		this.holder = new ViewHolder();
 	}
 
@@ -52,39 +54,42 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Item item = itemList.get(position);
+		final Item item = itemList.get(position);
 		holder.title.setText(item.layerName);
 		holder.title.setTextColor(item.color);
 
 		holder.visibilityOnButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Visibility", Toast.LENGTH_SHORT)
-						.show();
 				holder.visibilityOnButton.setVisibility(View.INVISIBLE);
 				holder.visibilityOffButton.setVisibility(View.VISIBLE);
 				holder.visibilityOnButton.setEnabled(false);
 				holder.visibilityOffButton.setEnabled(true);
+
+				item.isVisible = false;
+				activity.invalidateCanvas();
 			}
 		});
 
 		holder.visibilityOffButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				holder.visibilityOnButton.setVisibility(View.VISIBLE);
 				holder.visibilityOffButton.setVisibility(View.INVISIBLE);
 				holder.visibilityOnButton.setEnabled(true);
 				holder.visibilityOffButton.setEnabled(false);
+
+				item.isVisible = true;
+				activity.invalidateCanvas();
 			}
 		});
 
 		holder.deleteButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
+				itemList.remove(item);
+				notifyDataSetChanged();
+				activity.invalidateCanvas();
 			}
 		});
 

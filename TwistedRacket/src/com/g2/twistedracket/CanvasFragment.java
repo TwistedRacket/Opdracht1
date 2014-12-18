@@ -22,7 +22,7 @@ import android.widget.EditText;
 
 public class CanvasFragment extends Fragment {
 
-	private CanvasView canvasView;
+	protected CanvasView canvasView;
 	private ActivityCommunication activityCommunication;
 
 	@Override

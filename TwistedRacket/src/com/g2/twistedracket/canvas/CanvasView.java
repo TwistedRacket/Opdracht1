@@ -77,27 +77,30 @@ public class CanvasView extends View {
 
 		int pos = 0;
 		for (Item item : itemList) {
-			if (pos == selectedItem && scaleEnabled) {
-				item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
-				item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
+			if (item.isVisible) {
+				if (pos == selectedItem && scaleEnabled) {
+					item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
+					item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
+				}
+
+				paint.setColor(item.color);
+
+				switch (item.shapeVersion) {
+				case Constants.SHAPE_RECT:
+					canvas.drawRect(item.posX, item.posY, item.posX
+							+ item.width, item.posY + item.height, paint);
+					break;
+				case Constants.SHAPE_CIRCLE:
+					canvas.drawCircle(item.posX, item.posY, item.width / 2,
+							paint);
+					break;
+
+				case Constants.TEXT:
+					canvas.drawText(item.text, item.posX, item.posY, paint);
+					break;
+				}
+				pos++;
 			}
-
-			paint.setColor(item.color);
-
-			switch (item.shapeVersion) {
-			case Constants.SHAPE_RECT:
-				canvas.drawRect(item.posX, item.posY, item.posX + item.width,
-						item.posY + item.height, paint);
-				break;
-			case Constants.SHAPE_CIRCLE:
-				canvas.drawCircle(item.posX, item.posY, item.width / 2, paint);
-				break;
-
-			case Constants.TEXT:
-				canvas.drawText(item.text, item.posX, item.posY, paint);
-				break;
-			}
-			pos++;
 		}
 
 		canvas.drawPath(path, fingerPaint);

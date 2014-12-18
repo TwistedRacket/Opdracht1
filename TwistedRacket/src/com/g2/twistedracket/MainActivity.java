@@ -147,8 +147,8 @@ public class MainActivity extends ActionBarActivity implements
 	public void createRightLayerDrawer() {
 		layerItems = new ArrayList<>();
 
-		layerListAdapter = new LayerDrawerListAdapter(getApplicationContext(),
-				layerItems);
+		layerListAdapter = new LayerDrawerListAdapter(this,
+				getApplicationContext(), layerItems);
 
 		layerListView = (ListView) findViewById(R.id.right_menu);
 		layerListView.setAdapter(layerListAdapter);
@@ -161,6 +161,10 @@ public class MainActivity extends ActionBarActivity implements
 				canvasFragment.canvasViewSetSelectedItem(position);
 			}
 		});
+	}
+
+	public void invalidateCanvas() {
+		canvasFragment.canvasView.invalidate();
 	}
 
 	@Override

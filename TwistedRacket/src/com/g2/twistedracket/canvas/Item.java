@@ -10,6 +10,7 @@ public class Item {
 	public int width = Constants.DEFAULT_ITEM_WIDTH;
 	public int height = Constants.DEFAULT_ITEM_HEIGHT;
 	public int color;
+	public boolean isVisible = true;
 
 	public String layerName;
 	public String text;
