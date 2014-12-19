@@ -44,8 +44,11 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 					.findViewById(R.id.visibilityOnButton);
 			holder.visibilityOffButton = (ImageButton) convertView
 					.findViewById(R.id.visibilityOffButton);
+			holder.changeColorButton = (ImageButton) convertView
+					.findViewById(R.id.changeColorButton);
 			holder.deleteButton = (ImageButton) convertView
 					.findViewById(R.id.deleteButton);
+
 			holder.visibilityOffButton.setVisibility(View.INVISIBLE);
 			holder.visibilityOffButton.setEnabled(false);
 
@@ -84,6 +87,14 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			}
 		});
 
+		holder.changeColorButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				activity.canvasFragment.createColorPicker(item);
+				notifyDataSetChanged();
+			}
+		});
+
 		holder.deleteButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -113,7 +124,7 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 
 	private static class ViewHolder {
 		TextView title;
-		// ImageView imgIcon;
+		ImageButton changeColorButton;
 		ImageButton visibilityOnButton;
 		ImageButton visibilityOffButton;
 		ImageButton deleteButton;

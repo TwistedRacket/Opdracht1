@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private FrameLayout dimmedBackground;
 
-	private CanvasFragment canvasFragment;
+	public CanvasFragment canvasFragment;
 
 	private PopupWindow popupWindow;
 
@@ -235,7 +235,7 @@ public class MainActivity extends ActionBarActivity implements
 					int position, long id) {
 				drawerLayout.closeDrawers();
 				if (position == 7) {
-					canvasFragment.createColorPicker();
+					canvasFragment.createColorPicker(null);
 				} else if (position == 6) {
 					launchCamera();
 				} else if (position == 4) {

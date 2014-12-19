@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Canvas.VertexMode;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -20,7 +21,6 @@ import android.view.View;
 
 public class CanvasView extends View {
 
-	private Context context;
 	private Paint paint;
 	private Paint fingerPaint;
 
@@ -28,6 +28,7 @@ public class CanvasView extends View {
 
 	private ArrayList<Item> itemList;
 	private Path path = new Path();
+	private Path pathTriangle = new Path();
 
 	public boolean fingerDrawingEnabled = false;
 	private boolean movingEnabled = true;
@@ -38,13 +39,13 @@ public class CanvasView extends View {
 	public int selectedItem = 0;
 	public int selectedColor = Color.parseColor("#DA001A");
 	private final ScaleGestureDetector scaleGestureDetector;
+	public ScaleGestureDetector detectorZ;
 
 	private final Bitmap racketBackground;
 	private final Bitmap racketBackgroundInverted;
 
 	public CanvasView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
 
 		this.racketBackground = Bitmap.createScaledBitmap(BitmapFactory
 				.decodeResource(getResources(),
@@ -90,9 +91,19 @@ public class CanvasView extends View {
 		int pos = 0;
 		for (Item item : itemList) {
 			if (item.isVisible) {
-				if (pos == selectedItem && scaleEnabled) {
+				if (pos == selectedItem && scaleEnabled && detectorZ != null) {
 					item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
 					item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
+					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
+						item.posX = (int) detectorZ.getFocusX();
+						item.posY = (int) detectorZ.getFocusY();
+					} else {
+						item.posX = (int) detectorZ.getFocusX() - item.width
+								/ 2;
+						item.posY = (int) detectorZ.getFocusY() - item.height
+								/ 2;
+					}
+
 				}
 
 				paint.setColor(item.color);
@@ -105,6 +116,20 @@ public class CanvasView extends View {
 				case Constants.SHAPE_CIRCLE:
 					canvas.drawCircle(item.posX, item.posY, item.width / 2,
 							paint);
+					break;
+				case Constants.SHAPE_TRIANGLE:
+					float[] verts = new float[6];
+					verts[0] = item.posX;
+					verts[1] = item.posY + item.height;
+					verts[2] = item.posX + item.width;
+					verts[3] = item.posY + item.height;
+					verts[4] = item.posX + item.width / 2;
+					verts[5] = item.posY;
+
+					pathTriangle.moveTo(verts[0], verts[1]);
+					pathTriangle.lineTo(verts[2], verts[3]);
+					pathTriangle.lineTo(verts[4], verts[5]);
+					canvas.drawPath(pathTriangle, paint);
 					break;
 				case Constants.TEXT:
 					canvas.drawText(item.text, item.posX, item.posY, paint);
@@ -134,7 +159,11 @@ public class CanvasView extends View {
 			fingerDrawingEnabled = true;
 		} else {
 			fingerDrawingEnabled = false;
-			itemList.add(new Item(shapeVersion, selectedColor));
+			if (shapeVersion == 2) {
+				itemList.add(new Item(Constants.SHAPE_TRIANGLE, selectedColor));
+			} else {
+				itemList.add(new Item(shapeVersion, selectedColor));
+			}
 		}
 
 		invalidate();
@@ -173,7 +202,7 @@ public class CanvasView extends View {
 		float eventX = event.getX();
 		float eventY = event.getY();
 
-		if (!itemList.isEmpty() && eventX > 100 && eventX < 980) {
+		if (eventX > 100 && eventX < 980) {
 			scaleGestureDetector.onTouchEvent(event);
 
 			if (fingerDrawingEnabled) {
@@ -187,7 +216,7 @@ public class CanvasView extends View {
 				default:
 					return false;
 				}
-			} else if (movingEnabled) {
+			} else if (movingEnabled && !itemList.isEmpty()) {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_MOVE:
 					Item item = itemList.get(selectedItem);
@@ -195,8 +224,8 @@ public class CanvasView extends View {
 						item.posX = (int) eventX;
 						item.posY = (int) eventY;
 					} else {
-						item.posX = (int) eventX - (item.width / 2);
-						item.posY = (int) eventY - (item.height / 2);
+						item.posX = (int) (eventX - (item.width / 2));
+						item.posY = (int) (eventY - (item.height / 2));
 					}
 					break;
 				}
@@ -211,6 +240,7 @@ public class CanvasView extends View {
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
 			scaleFactor *= detector.getScaleFactor();
+			detectorZ = detector;
 
 			// don't let the object get too small or too large.
 			scaleFactor = Math.max(0.1f, Math.min(scaleFactor, 5.0f));
@@ -219,6 +249,5 @@ public class CanvasView extends View {
 			return true;
 		}
 	}
-
 
 }

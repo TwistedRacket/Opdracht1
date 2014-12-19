@@ -63,12 +63,17 @@ public class CanvasFragment extends Fragment {
 		}
 	}
 
-	protected void createColorPicker() {
+	public void createColorPicker(final Item item) {
 		AmbilWarnaDialog dialog = new AmbilWarnaDialog(getActivity(),
 				canvasView.selectedColor, new OnAmbilWarnaListener() {
 					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						canvasView.setColor(color);
+						if (item != null) {
+							item.color = color;
+							canvasView.invalidate();
+						} else {
+							canvasView.setColor(color);
+						}
 					}
 
 					@Override
@@ -96,7 +101,9 @@ public class CanvasFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				canvasView.setText(editText.getText().toString());
+				if (!editText.getText().equals("")) {
+					canvasView.setText(editText.getText().toString());
+				}
 				dialog.dismiss();
 			}
 		});
