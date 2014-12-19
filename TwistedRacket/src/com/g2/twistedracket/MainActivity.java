@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements
 	private PopupWindow popupWindow;
 
 	static final int REQUEST_IMAGE_CAPTURE = 1;
-	static final int RESULT_LOAD_IMAGE = 1;
+	static final int RESULT_LOAD_IMAGE = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -238,14 +238,11 @@ public class MainActivity extends ActionBarActivity implements
 					canvasFragment.createColorPicker();
 				} else if (position == 6) {
 					launchCamera();
-				} else if(position == 4) {
+				} else if (position == 4) {
 					canvasFragment.canvasView.fingerDrawingEnabled = true;
-				}
-				else if(position ==5)
-				{
+				} else if (position == 5) {
 					openFoto();
-				}
-				else{
+				} else {
 					canvasFragment.updateCanvas(position);
 				}
 				layerListAdapter.notifyDataSetChanged();
@@ -274,15 +271,13 @@ public class MainActivity extends ActionBarActivity implements
 			startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
 		}
 	}
-	
-    public void openFoto()
-    {
-    	Intent intent = new Intent(Intent.ACTION_PICK,
-    			android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-    	startActivityForResult(intent, RESULT_LOAD_IMAGE);
-    	
-    }
 
+	public void openFoto() {
+		Intent intent = new Intent(Intent.ACTION_PICK,
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		startActivityForResult(intent, RESULT_LOAD_IMAGE);
+
+	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -292,20 +287,19 @@ public class MainActivity extends ActionBarActivity implements
 			imageBitmap = Utils.getResizedBitmap(imageBitmap, 1920, 1080);
 			canvasFragment.canvasView.addPicture(imageBitmap);
 			layerListAdapter.notifyDataSetChanged();
-		}
-		
-    	if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null)
-    	{
-    		Bundle extra = data.getExtras();
-    		Uri selectedImage = (Uri)extra.get("data");
-    		String[] filePathColumn = {MediaStore.Images.Media.DATA};
-    		Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-    		cursor.moveToFirst();
-    		
-    		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-    		String picturePath = cursor.getString(columnIndex);
-    		cursor.close();
-			canvasFragment.canvasView.addPicture(BitmapFactory.decodeFile(picturePath));
+		} else if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+				&& data != null) {
+			Uri selectedImage = data.getData();
+			String[] filePathColumn = { MediaStore.Images.Media.DATA };
+			Cursor cursor = getContentResolver().query(selectedImage,
+					filePathColumn, null, null, null);
+			cursor.moveToFirst();
+
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			String picturePath = cursor.getString(columnIndex);
+			cursor.close();
+			canvasFragment.canvasView.addPicture(BitmapFactory
+					.decodeFile(picturePath));
 			layerListAdapter.notifyDataSetChanged();
 		}
 	}
