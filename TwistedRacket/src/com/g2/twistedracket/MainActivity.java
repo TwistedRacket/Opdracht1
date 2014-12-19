@@ -2,22 +2,19 @@ package com.g2.twistedracket;
 
 import java.util.ArrayList;
 
-import com.g2.twistedracket.canvas.Item;
-import com.g2.twistedracket.canvas.Utils;
-import com.g2.twistedracket.drawer.ItemListAdapter;
-import com.g2.twistedracket.drawer.LayerDrawerListAdapter;
-import com.g2.twistedracket.drawer.NavigationDrawerItem;
-import com.g2.twistedracket.drawer.NavigationDrawerListAdapter;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,14 +27,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
+
+import com.g2.twistedracket.canvas.Item;
+import com.g2.twistedracket.canvas.Utils;
+import com.g2.twistedracket.drawer.ItemListAdapter;
+import com.g2.twistedracket.drawer.LayerDrawerListAdapter;
+import com.g2.twistedracket.drawer.NavigationDrawerItem;
+import com.g2.twistedracket.drawer.NavigationDrawerListAdapter;
 
 ;
 
@@ -66,6 +71,7 @@ public class MainActivity extends ActionBarActivity implements
 	private PopupWindow popupWindow;
 
 	static final int REQUEST_IMAGE_CAPTURE = 1;
+	static final int RESULT_LOAD_IMAGE = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -232,7 +238,14 @@ public class MainActivity extends ActionBarActivity implements
 					canvasFragment.createColorPicker();
 				} else if (position == 6) {
 					launchCamera();
-				} else {
+				} else if(position == 4) {
+					canvasFragment.canvasView.fingerDrawingEnabled = true;
+				}
+				else if(position ==5)
+				{
+					openFoto();
+				}
+				else{
 					canvasFragment.updateCanvas(position);
 				}
 				layerListAdapter.notifyDataSetChanged();
@@ -261,6 +274,15 @@ public class MainActivity extends ActionBarActivity implements
 			startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
 		}
 	}
+	
+    public void openFoto()
+    {
+    	Intent intent = new Intent(Intent.ACTION_PICK,
+    			android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    	startActivityForResult(intent, RESULT_LOAD_IMAGE);
+    	
+    }
+
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -269,6 +291,21 @@ public class MainActivity extends ActionBarActivity implements
 			Bitmap imageBitmap = (Bitmap) extra.get("data");
 			imageBitmap = Utils.getResizedBitmap(imageBitmap, 1920, 1080);
 			canvasFragment.canvasView.addPicture(imageBitmap);
+			layerListAdapter.notifyDataSetChanged();
+		}
+		
+    	if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null)
+    	{
+    		Bundle extra = data.getExtras();
+    		Uri selectedImage = (Uri)extra.get("data");
+    		String[] filePathColumn = {MediaStore.Images.Media.DATA};
+    		Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+    		cursor.moveToFirst();
+    		
+    		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+    		String picturePath = cursor.getString(columnIndex);
+    		cursor.close();
+			canvasFragment.canvasView.addPicture(BitmapFactory.decodeFile(picturePath));
 			layerListAdapter.notifyDataSetChanged();
 		}
 	}

@@ -29,7 +29,7 @@ public class CanvasView extends View {
 	private ArrayList<Item> itemList;
 	private Path path = new Path();
 
-	private boolean fingerDrawingEnabled = false;
+	public boolean fingerDrawingEnabled = false;
 	private boolean movingEnabled = true;
 	private boolean scaleEnabled = true;
 	public boolean canShowRacket = true;
@@ -219,4 +219,6 @@ public class CanvasView extends View {
 			return true;
 		}
 	}
+
+
 }
