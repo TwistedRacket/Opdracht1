@@ -1,0 +1,8 @@
+fingerpaint color
+fingerpaint layer
+new layer created direct kunnen verplaatsen
+plusje in actionbar voor new layer
+als je rect heb en paint doet dan blijf je het 4kantje vasthouden en teken je ook
+foto als onderste layer
+shapes geen verschillende sizes
+tekst is niet te vergroten
