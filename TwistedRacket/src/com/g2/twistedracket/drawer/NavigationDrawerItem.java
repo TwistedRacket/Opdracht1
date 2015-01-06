@@ -4,7 +4,8 @@ public class NavigationDrawerItem {
 	private String title;
 	private int icon;
 
-	public NavigationDrawerItem() {
+	public NavigationDrawerItem(String title) {
+		this.title = title;
 	}
 
 	public NavigationDrawerItem(String title, int icon) {

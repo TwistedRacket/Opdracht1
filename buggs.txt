@@ -6,3 +6,4 @@ als je rect heb en paint doet dan blijf je het 4kantje vasthouden en teken je oo
 foto als onderste layer
 shapes geen verschillende sizes
 tekst is niet te vergroten
+visibility settings error

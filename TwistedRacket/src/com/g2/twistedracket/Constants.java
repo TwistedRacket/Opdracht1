@@ -8,6 +8,7 @@ public class Constants {
 	public static final int DRAW = 2;
 	public static final int TEXT = 10;
 	public static final int PHOTO = 11;
+	public static final int FINGER_PAINT = 12;
 
 	public static final int DEFAULT_ITEM_POSITION_X = 200;
 	public static final int DEFAULT_ITEM_POSITION_Y = 200;

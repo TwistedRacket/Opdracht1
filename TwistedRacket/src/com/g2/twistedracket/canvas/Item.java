@@ -1,6 +1,7 @@
 package com.g2.twistedracket.canvas;
 
 import android.graphics.Bitmap;
+import android.graphics.Path;
 
 import com.g2.twistedracket.Constants;
 
@@ -17,12 +18,16 @@ public class Item {
 	public String layerName;
 	public String text;
 	public Bitmap bitmap;
+	public Path path;
 
 	private static int itemNumber = 1;
 
 	public Item(int shapeVersion, int color) {
 		this.shapeVersion = shapeVersion;
 		this.color = color;
+		if (shapeVersion == Constants.FINGER_PAINT) {
+			this.path = new Path();
+		}
 
 		this.layerName = "Layer" + itemNumber;
 		itemNumber++;

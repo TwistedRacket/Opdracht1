@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
 public class CanvasView extends View {
 
@@ -27,7 +28,6 @@ public class CanvasView extends View {
 	private float scaleFactor = 1.0f;
 
 	private ArrayList<Item> itemList;
-	private Path path = new Path();
 
 	public boolean fingerDrawingEnabled = false;
 	private boolean movingEnabled = true;
@@ -124,7 +124,7 @@ public class CanvasView extends View {
 					verts[3] = item.posY + item.height;
 					verts[4] = item.posX + item.width / 2;
 					verts[5] = item.posY;
-					
+
 					Path pathTriangle = new Path();
 
 					pathTriangle.moveTo(verts[0], verts[1]);
@@ -138,12 +138,14 @@ public class CanvasView extends View {
 				case Constants.PHOTO:
 					canvas.drawBitmap(item.bitmap, 0, 0, paint);
 					break;
+				case Constants.FINGER_PAINT:
+					fingerPaint.setColor(item.color);
+					canvas.drawPath(item.path, fingerPaint);
+					break;
 				}
 				pos++;
 			}
 		}
-
-		canvas.drawPath(path, fingerPaint);
 
 		if (canShowRacket) {
 			if (isInverted) {
@@ -157,6 +159,8 @@ public class CanvasView extends View {
 	public void addItemToCanvas(int shapeVersion) {
 		Log.i("MyActivity", "Int: " + shapeVersion);
 		if (shapeVersion == 4) {
+
+			itemList.add(new Item(Constants.FINGER_PAINT, selectedColor));
 			fingerDrawingEnabled = true;
 		} else {
 			fingerDrawingEnabled = false;
@@ -166,7 +170,8 @@ public class CanvasView extends View {
 				itemList.add(new Item(shapeVersion, selectedColor));
 			}
 		}
-
+		selectedItem = itemList.size() - 1;
+		Log.i("paf", "LSCREATE: " + itemList.size());
 		invalidate();
 	}
 
@@ -174,13 +179,15 @@ public class CanvasView extends View {
 		Item item = new Item(Constants.TEXT, selectedColor);
 		item.text = text;
 		itemList.add(item);
+		selectedItem = itemList.size() - 1;
 		invalidate();
 	}
 
 	public void addPicture(Bitmap bitmap) {
 		Item item = new Item(Constants.PHOTO, selectedColor);
 		item.bitmap = bitmap;
-		itemList.add(item);
+		itemList.add(0, item);
+		selectedItem = itemList.size() - 1;
 		invalidate();
 	}
 
@@ -194,7 +201,7 @@ public class CanvasView extends View {
 	public void clearCanvas() {
 		fingerDrawingEnabled = false;
 		itemList.clear();
-		path.reset();
+		// path.reset();
 		invalidate();
 	}
 
@@ -207,12 +214,16 @@ public class CanvasView extends View {
 			scaleGestureDetector.onTouchEvent(event);
 
 			if (fingerDrawingEnabled) {
+				// selectedItem = -1; // Disable moving of shape when finger
+				// drawing is enabled.
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					path.moveTo(eventX, eventY);
+					Log.i("paf", "LS: " + itemList.size());
+					itemList.get(selectedItem).path.moveTo(eventX, eventY);
 					return true;
 				case MotionEvent.ACTION_MOVE:
-					path.lineTo(eventX, eventY);
+					Log.i("paf", "LS: " + itemList.size());
+					itemList.get(selectedItem).path.lineTo(eventX, eventY);
 					break;
 				default:
 					return false;

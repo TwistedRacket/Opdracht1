@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.Toast;
 
 import com.g2.twistedracket.canvas.Item;
 import com.g2.twistedracket.canvas.Utils;
@@ -76,7 +78,19 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		// getActionBar().hide();
+		// setContentView(R.layout.fragment_splash_screen);
+		//
+		// try {
+		// Thread.sleep(2000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+
 		setContentView(R.layout.activity_main);
+		// getActionBar().show();
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -113,8 +127,9 @@ public class MainActivity extends ActionBarActivity implements
 		navigationDrawerListView = (ListView) findViewById(R.id.left_menu);
 
 		navDrawerItems = new ArrayList<NavigationDrawerItem>();
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0],
-				navMenuIconList.getResourceId(0, -1)));
+		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0]));
+		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[1]));
+		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[2]));
 		navMenuIconList.recycle();
 
 		// setting the nav drawer list adapter
@@ -130,8 +145,11 @@ public class MainActivity extends ActionBarActivity implements
 			}
 
 			@Override
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerClosed(drawerView);
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+					drawerLayout.closeDrawer(Gravity.RIGHT);
+				}
+				super.onDrawerSlide(drawerView, slideOffset);
 			}
 		};
 
@@ -147,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements
 
 						drawerLayout.closeDrawers();
 						if (position == 0) {
-							createNewItemPopupWindow();
+							// createNewItemPopupWindow();
 							return;
 						}
 					}
@@ -239,7 +257,7 @@ public class MainActivity extends ActionBarActivity implements
 				} else if (position == 6) {
 					launchCamera();
 				} else if (position == 4) {
-					canvasFragment.canvasView.fingerDrawingEnabled = true;
+					canvasFragment.updateCanvas(position);
 				} else if (position == 5) {
 					openFoto();
 				} else {
@@ -317,6 +335,17 @@ public class MainActivity extends ActionBarActivity implements
 		super.onOptionsItemSelected(item);
 		if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
+		} else if (item.getItemId() == R.id.action_add_item) {
+			createNewItemPopupWindow();
+		} else if (item.getItemId() == R.id.action_menu) {
+			if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+				drawerLayout.closeDrawer(Gravity.RIGHT);
+			} else {
+				if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+					drawerLayout.closeDrawer(Gravity.LEFT);
+				}
+				drawerLayout.openDrawer(Gravity.RIGHT);
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}

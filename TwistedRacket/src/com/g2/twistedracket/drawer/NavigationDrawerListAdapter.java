@@ -27,7 +27,7 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 		this.navigationDrawerItems = navigationDrawerItems;
 		this.typeFace = Typeface.createFromAsset(context.getAssets(),
 				"fonts/Roboto-Medium.ttf");
-		//this.holder = new ViewHolder();
+		// this.holder = new ViewHolder();
 	}
 
 	@Override
@@ -35,11 +35,13 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.navigation_drawer_list_item, parent, false);
+			convertView = inflater.inflate(
+					R.layout.navigation_drawer_list_item, parent, false);
 
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.title);
-			//holder.title = (TextView) convertView.findViewById(R.id.layerName);
+			// holder.title = (TextView)
+			// convertView.findViewById(R.id.layerName);
 			holder.imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 
 			convertView.setTag(holder);
@@ -49,8 +51,10 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 		holder.title.setTypeface(typeFace);
 		holder.title.setText(navigationDrawerItems.get(position).getTitle());
-		holder.imgIcon.setImageResource(navigationDrawerItems.get(position)
-				.getIcon());
+		if (navigationDrawerItems.get(position).getIcon() != 0) {
+			holder.imgIcon.setImageResource(navigationDrawerItems.get(position)
+					.getIcon());
+		}
 
 		return convertView;
 	}
