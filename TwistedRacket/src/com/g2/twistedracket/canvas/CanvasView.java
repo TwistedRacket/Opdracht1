@@ -28,7 +28,6 @@ public class CanvasView extends View {
 
 	private ArrayList<Item> itemList;
 	private Path path = new Path();
-	private Path pathTriangle = new Path();
 
 	public boolean fingerDrawingEnabled = false;
 	private boolean movingEnabled = true;
@@ -125,6 +124,8 @@ public class CanvasView extends View {
 					verts[3] = item.posY + item.height;
 					verts[4] = item.posX + item.width / 2;
 					verts[5] = item.posY;
+					
+					Path pathTriangle = new Path();
 
 					pathTriangle.moveTo(verts[0], verts[1]);
 					pathTriangle.lineTo(verts[2], verts[3]);
