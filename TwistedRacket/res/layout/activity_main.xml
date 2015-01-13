@@ -32,13 +32,14 @@
 
             <RelativeLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
+                android:layout_width="170dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right" >
 
                 <ListView
                     android:id="@+id/right_menu"
-                    android:layout_width="200dp"
+                    style="@style/deviderStyle"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:background="@color/itemListColor"
@@ -47,7 +48,7 @@
                 <CheckBox
                     android:id="@+id/showRacketCheckBox"
                     style="@style/styleNavigationDrawerTextViewHeader"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:checked="true"
@@ -56,7 +57,7 @@
                 <CheckBox
                     android:id="@+id/invertedRacket"
                     style="@style/styleNavigationDrawerTextViewHeader"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/showRacketCheckBox"
                     android:checked="false"

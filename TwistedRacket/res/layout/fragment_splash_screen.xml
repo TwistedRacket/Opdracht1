@@ -5,11 +5,27 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/splash_screen_img"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/tr_splash" />
+
+    <TextView
+        style="@style/styleSplashScreenText"
+        android:layout_below="@id/splash_screen_img"
+        android:layout_centerHorizontal="true"
+        android:text="Twisted Rackets" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Twisted Racket"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="25dp"
+        android:text="powered by oce"
         android:textSize="20sp" />
 
 </RelativeLayout>

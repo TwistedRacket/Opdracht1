@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class CanvasFragment extends Fragment {
 
@@ -53,7 +54,6 @@ public class CanvasFragment extends Fragment {
 	}
 
 	protected void updateCanvas(int version) {
-		Log.i("MyActivity", "" + version);
 		if (version == 8) {
 			canvasView.clearCanvas();
 		} else if (version == 3) {
@@ -90,9 +90,7 @@ public class CanvasFragment extends Fragment {
 	}
 
 	private void addTextItem() {
-		final Dialog dialog = new Dialog(getActivity());
-		dialog.setTitle("Set text");
-		dialog.setContentView(R.layout.text_dialog);
+		final Dialog dialog = createDialog("Set Text");
 		Button ofButton = (Button) dialog.findViewById(R.id.textDialogOkButton);
 		final EditText editText = (EditText) dialog
 				.findViewById(R.id.inputText);
@@ -108,6 +106,35 @@ public class CanvasFragment extends Fragment {
 			}
 		});
 		dialog.show();
+	}
+
+	protected void saveToImage() {
+		final Dialog dialog = createDialog("Set Name");
+		Button ofButton = (Button) dialog.findViewById(R.id.textDialogOkButton);
+		final EditText editText = (EditText) dialog
+				.findViewById(R.id.inputText);
+
+		ofButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (!editText.getText().equals("")) {
+					canvasView.saveTo(editText.getText().toString());
+				}
+				dialog.dismiss();
+				Toast.makeText(getActivity().getApplicationContext(), "Saved",
+						Toast.LENGTH_LONG).show();
+			}
+		});
+		dialog.show();
+	}
+
+	private Dialog createDialog(String title) {
+		final Dialog dialog = new Dialog(getActivity());
+		dialog.setTitle("Set Name");
+		dialog.setContentView(R.layout.text_dialog);
+
+		return dialog;
 	}
 
 	protected interface ActivityCommunication {

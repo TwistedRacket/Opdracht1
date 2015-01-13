@@ -1,5 +1,7 @@
 package com.g2.twistedracket.canvas;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import com.g2.twistedracket.Constants;
@@ -13,6 +15,7 @@ import android.graphics.Canvas.VertexMode;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -40,11 +43,16 @@ public class CanvasView extends View {
 	private final ScaleGestureDetector scaleGestureDetector;
 	public ScaleGestureDetector detectorZ;
 
+	private static final int MIN_TOUCH_X = 100;
+	private int MAX_TOUCH_X;
+
 	private final Bitmap racketBackground;
 	private final Bitmap racketBackgroundInverted;
 
 	public CanvasView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		MAX_TOUCH_X = Utils.getWidth(context) - 100;
 
 		this.racketBackground = Bitmap.createScaledBitmap(BitmapFactory
 				.decodeResource(getResources(),
@@ -89,14 +97,22 @@ public class CanvasView extends View {
 
 		int pos = 0;
 		for (Item item : itemList) {
+			// sLog.i("paf", "itemValue: " + item.number + "  " +
+			// item.isVisible);
 			if (item.isVisible) {
 				if (pos == selectedItem && scaleEnabled && detectorZ != null) {
-					item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
-					item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
+
 					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
+						item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
+						item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
 						item.posX = (int) detectorZ.getFocusX();
 						item.posY = (int) detectorZ.getFocusY();
+					}
+					if (item.shapeVersion == Constants.TEXT) {
+						paint.setTextSize(160f * scaleFactor);
 					} else {
+						item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
+						item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
 						item.posX = (int) detectorZ.getFocusX() - item.width
 								/ 2;
 						item.posY = (int) detectorZ.getFocusY() - item.height
@@ -175,6 +191,24 @@ public class CanvasView extends View {
 		invalidate();
 	}
 
+	public void saveTo(String fileName) {
+		Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(),
+				Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		this.draw(canvas);
+
+		File file = new File(Environment.getExternalStorageDirectory() + "/"
+				+ fileName + ".png");
+
+		try {
+			file.createNewFile();
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100,
+					new FileOutputStream(file));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void setText(String text) {
 		Item item = new Item(Constants.TEXT, selectedColor);
 		item.text = text;
@@ -199,6 +233,7 @@ public class CanvasView extends View {
 	}
 
 	public void clearCanvas() {
+		Item.itemNumber = 1;
 		fingerDrawingEnabled = false;
 		itemList.clear();
 		// path.reset();
@@ -210,7 +245,7 @@ public class CanvasView extends View {
 		float eventX = event.getX();
 		float eventY = event.getY();
 
-		if (eventX > 100 && eventX < 980) {
+		if (eventX > MIN_TOUCH_X && eventX < MAX_TOUCH_X) {
 			scaleGestureDetector.onTouchEvent(event);
 
 			if (fingerDrawingEnabled) {
@@ -224,6 +259,9 @@ public class CanvasView extends View {
 				case MotionEvent.ACTION_MOVE:
 					Log.i("paf", "LS: " + itemList.size());
 					itemList.get(selectedItem).path.lineTo(eventX, eventY);
+					break;
+				case MotionEvent.ACTION_UP:
+					Log.i("paf", "UP");
 					break;
 				default:
 					return false;
@@ -242,6 +280,12 @@ public class CanvasView extends View {
 					break;
 				}
 			}
+
+			// if(event.getAction() == MotionEvent.ACTION_UP){
+			// Item item = itemList.get(selectedItem);
+			// item.width = item.width * scaleFactor
+			// }
+
 			invalidate();
 		}
 		return true;
@@ -256,6 +300,8 @@ public class CanvasView extends View {
 
 			// don't let the object get too small or too large.
 			scaleFactor = Math.max(0.1f, Math.min(scaleFactor, 5.0f));
+
+			Log.i("paf", "ScaleFactor: " + scaleFactor);
 
 			invalidate();
 			return true;

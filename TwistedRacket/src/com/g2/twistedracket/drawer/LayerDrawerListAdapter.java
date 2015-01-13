@@ -1,6 +1,7 @@
 package com.g2.twistedracket.drawer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.g2.twistedracket.MainActivity;
 import com.g2.twistedracket.R;
@@ -8,6 +9,7 @@ import com.g2.twistedracket.canvas.Item;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +22,21 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 
 	private Context context;
 	private ArrayList<Item> itemList;
-	private ViewHolder holder;
 	private MainActivity activity;
+	HashMap<Integer, Boolean> visibilityByIndex = new HashMap<Integer, Boolean>();
 
 	public LayerDrawerListAdapter(MainActivity activity, Context context,
 			ArrayList<Item> itemList) {
 		this.context = context;
 		this.itemList = itemList;
 		this.activity = activity;
-		this.holder = new ViewHolder();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+
+		final ViewHolder holder;
+		final int position2 = position;
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -41,16 +45,11 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.layerName);
 			holder.visibilityOnButton = (ImageButton) convertView
-					.findViewById(R.id.visibilityOnButton);
-			holder.visibilityOffButton = (ImageButton) convertView
-					.findViewById(R.id.visibilityOffButton);
+					.findViewById(R.id.visibilityButton);
 			holder.changeColorButton = (ImageButton) convertView
 					.findViewById(R.id.changeColorButton);
 			holder.deleteButton = (ImageButton) convertView
 					.findViewById(R.id.deleteButton);
-
-			holder.visibilityOffButton.setVisibility(View.INVISIBLE);
-			holder.visibilityOffButton.setEnabled(false);
 
 			convertView.setTag(holder);
 		} else {
@@ -64,25 +63,24 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 		holder.visibilityOnButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				holder.visibilityOnButton.setVisibility(View.INVISIBLE);
-				holder.visibilityOffButton.setVisibility(View.VISIBLE);
-				holder.visibilityOnButton.setEnabled(false);
-				holder.visibilityOffButton.setEnabled(true);
 
-				item.isVisible = false;
-				activity.invalidateCanvas();
-			}
-		});
+				if (!visibilityByIndex.containsKey(position2)
+						|| visibilityByIndex.get(position2)) {
+					visibilityByIndex.put(position2, false);
+					holder.visibilityOnButton.setImageDrawable(context
+							.getResources().getDrawable(
+									R.drawable.ic_visibility_off_grey600_24dp));
 
-		holder.visibilityOffButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				holder.visibilityOnButton.setVisibility(View.VISIBLE);
-				holder.visibilityOffButton.setVisibility(View.INVISIBLE);
-				holder.visibilityOnButton.setEnabled(true);
-				holder.visibilityOffButton.setEnabled(false);
-
-				item.isVisible = true;
+					Log.i("paf", "LDGV: false" + " Position: " + position2);
+					item.isVisible = false;
+				} else if (!visibilityByIndex.get(position2)) {
+					visibilityByIndex.put(position2, true);
+					holder.visibilityOnButton.setImageDrawable(context
+							.getResources().getDrawable(
+									R.drawable.ic_visibility_grey600_24dp));
+					Log.i("paf", "LDGV: true" + " Position: " + position2);
+					item.isVisible = true;
+				}
 				activity.invalidateCanvas();
 			}
 		});
@@ -126,7 +124,6 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 		TextView title;
 		ImageButton changeColorButton;
 		ImageButton visibilityOnButton;
-		ImageButton visibilityOffButton;
 		ImageButton deleteButton;
 	}
 

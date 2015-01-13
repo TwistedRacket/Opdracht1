@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -75,22 +76,41 @@ public class MainActivity extends ActionBarActivity implements
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	static final int RESULT_LOAD_IMAGE = 2;
 
+	private Handler handler = new Handler();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+
 		super.onCreate(savedInstanceState);
 
-		// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		// getActionBar().hide();
-		// setContentView(R.layout.fragment_splash_screen);
-		//
-		// try {
-		// Thread.sleep(2000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
+		setContentView(R.layout.fragment_splash_screen);
 
-		setContentView(R.layout.activity_main);
+		//
+		// FragmentManager fm = getFragmentManager();
+		// FragmentTransaction ft = fm.beginTransaction();
+		// ft.add(R.id.fragmentContainer, new CanvasFragment());
+		// ft.commit();
+
 		// getActionBar().show();
+
+		// FragmentManager fm = getFragmentManager();
+		// FragmentTransaction ft = fm.beginTransaction();
+		// ft.add(R.id.fragmentContainer, new SplashScreenFragment());
+		// ft.commit();
+
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				zwa();
+			}
+		}, 2000);
+
+	}
+
+	public void zwa() {
+		setContentView(R.layout.activity_main);
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -105,6 +125,8 @@ public class MainActivity extends ActionBarActivity implements
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.add(R.id.fragmentContainer, new CanvasFragment());
 		ft.commit();
+
+		actionBarDrawerToggle.syncState();
 	}
 
 	@Override
@@ -165,7 +187,7 @@ public class MainActivity extends ActionBarActivity implements
 
 						drawerLayout.closeDrawers();
 						if (position == 0) {
-							// createNewItemPopupWindow();
+							canvasFragment.canvasView.saveTo("test");
 							return;
 						}
 					}
@@ -346,6 +368,9 @@ public class MainActivity extends ActionBarActivity implements
 				}
 				drawerLayout.openDrawer(Gravity.RIGHT);
 			}
+		} else if (item.getItemId() == R.id.action_save) {
+			canvasFragment.saveToImage();
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -353,7 +378,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		actionBarDrawerToggle.syncState();
+
 	}
 
 	@Override

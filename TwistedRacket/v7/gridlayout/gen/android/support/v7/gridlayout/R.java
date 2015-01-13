@@ -233,27 +233,27 @@ containing a value of this type.
     public static final class dimen {
         /**  The default gap between components in a layout. 
          */
-        public static int default_gap=0x7f030000;
+        public static int default_gap=0x7f020000;
     }
     public static final class id {
-        public static int alignBounds=0x7f020002;
-        public static int alignMargins=0x7f020003;
-        public static int bottom=0x7f020005;
-        public static int center=0x7f02000c;
-        public static int center_horizontal=0x7f02000a;
-        public static int center_vertical=0x7f020008;
-        public static int clip_horizontal=0x7f02000f;
-        public static int clip_vertical=0x7f02000e;
-        public static int end=0x7f020011;
-        public static int fill=0x7f02000d;
-        public static int fill_horizontal=0x7f02000b;
-        public static int fill_vertical=0x7f020009;
-        public static int horizontal=0x7f020000;
-        public static int left=0x7f020006;
-        public static int right=0x7f020007;
-        public static int start=0x7f020010;
-        public static int top=0x7f020004;
-        public static int vertical=0x7f020001;
+        public static int alignBounds=0x7f030002;
+        public static int alignMargins=0x7f030003;
+        public static int bottom=0x7f030004;
+        public static int center=0x7f030005;
+        public static int center_horizontal=0x7f030006;
+        public static int center_vertical=0x7f030007;
+        public static int clip_horizontal=0x7f030008;
+        public static int clip_vertical=0x7f030009;
+        public static int end=0x7f03000a;
+        public static int fill=0x7f03000b;
+        public static int fill_horizontal=0x7f03000c;
+        public static int fill_vertical=0x7f03000d;
+        public static int horizontal=0x7f030000;
+        public static int left=0x7f03000e;
+        public static int right=0x7f03000f;
+        public static int start=0x7f030010;
+        public static int top=0x7f030011;
+        public static int vertical=0x7f030001;
     }
     public static final class styleable {
         /** Attributes that can be used with a GridLayout.
@@ -321,7 +321,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:alignmentMode
         */
-        public static final int GridLayout_alignmentMode = 4;
+        public static int GridLayout_alignmentMode = 4;
         /**
           <p>
           @attr description
@@ -337,7 +337,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:columnCount
         */
-        public static final int GridLayout_columnCount = 2;
+        public static int GridLayout_columnCount = 2;
         /**
           <p>
           @attr description
@@ -358,7 +358,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:columnOrderPreserved
         */
-        public static final int GridLayout_columnOrderPreserved = 6;
+        public static int GridLayout_columnOrderPreserved = 6;
         /**
           <p>
           @attr description
@@ -390,7 +390,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:orientation
         */
-        public static final int GridLayout_orientation = 0;
+        public static int GridLayout_orientation = 0;
         /**
           <p>
           @attr description
@@ -406,7 +406,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:rowCount
         */
-        public static final int GridLayout_rowCount = 1;
+        public static int GridLayout_rowCount = 1;
         /**
           <p>
           @attr description
@@ -427,7 +427,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:rowOrderPreserved
         */
-        public static final int GridLayout_rowOrderPreserved = 5;
+        public static int GridLayout_rowOrderPreserved = 5;
         /**
           <p>
           @attr description
@@ -448,7 +448,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:useDefaultMargins
         */
-        public static final int GridLayout_useDefaultMargins = 3;
+        public static int GridLayout_useDefaultMargins = 3;
         /** Attributes that can be used with a GridLayout_Layout.
            <p>Includes the following attributes:</p>
            <table>
@@ -515,7 +515,7 @@ containing a value of this type.
           attribute's value can be found in the {@link #GridLayout_Layout} array.
           @attr name android:layout_height
         */
-        public static final int GridLayout_Layout_android_layout_height = 1;
+        public static int GridLayout_Layout_android_layout_height = 1;
         /**
           <p>
           @attr description
@@ -527,7 +527,7 @@ containing a value of this type.
           resource symbol {@link android.R.attr#layout_margin}.
           @attr name android:layout_margin
         */
-        public static final int GridLayout_Layout_android_layout_margin = 2;
+        public static int GridLayout_Layout_android_layout_margin = 2;
         /**
           <p>
           @attr description
@@ -539,7 +539,7 @@ containing a value of this type.
           resource symbol {@link android.R.attr#layout_marginBottom}.
           @attr name android:layout_marginBottom
         */
-        public static final int GridLayout_Layout_android_layout_marginBottom = 6;
+        public static int GridLayout_Layout_android_layout_marginBottom = 6;
         /**
           <p>
           @attr description
@@ -551,7 +551,7 @@ containing a value of this type.
           resource symbol {@link android.R.attr#layout_marginLeft}.
           @attr name android:layout_marginLeft
         */
-        public static final int GridLayout_Layout_android_layout_marginLeft = 3;
+        public static int GridLayout_Layout_android_layout_marginLeft = 3;
         /**
           <p>
           @attr description
@@ -563,7 +563,7 @@ containing a value of this type.
           resource symbol {@link android.R.attr#layout_marginRight}.
           @attr name android:layout_marginRight
         */
-        public static final int GridLayout_Layout_android_layout_marginRight = 5;
+        public static int GridLayout_Layout_android_layout_marginRight = 5;
         /**
           <p>
           @attr description
@@ -575,7 +575,7 @@ containing a value of this type.
           resource symbol {@link android.R.attr#layout_marginTop}.
           @attr name android:layout_marginTop
         */
-        public static final int GridLayout_Layout_android_layout_marginTop = 4;
+        public static int GridLayout_Layout_android_layout_marginTop = 4;
         /**
           <p>
           @attr description
@@ -588,7 +588,7 @@ containing a value of this type.
           resource symbol {@link android.R.attr#layout_width}.
           @attr name android:layout_width
         */
-        public static final int GridLayout_Layout_android_layout_width = 0;
+        public static int GridLayout_Layout_android_layout_width = 0;
         /**
           <p>
           @attr description
@@ -607,7 +607,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_column
         */
-        public static final int GridLayout_Layout_layout_column = 10;
+        public static int GridLayout_Layout_layout_column = 10;
         /**
           <p>
           @attr description
@@ -628,7 +628,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_columnSpan
         */
-        public static final int GridLayout_Layout_layout_columnSpan = 11;
+        public static int GridLayout_Layout_layout_columnSpan = 11;
         /**
           <p>
           @attr description
@@ -645,7 +645,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_columnWeight
         */
-        public static final int GridLayout_Layout_layout_columnWeight = 12;
+        public static int GridLayout_Layout_layout_columnWeight = 12;
         /**
           <p>
           @attr description
@@ -690,7 +690,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_gravity
         */
-        public static final int GridLayout_Layout_layout_gravity = 13;
+        public static int GridLayout_Layout_layout_gravity = 13;
         /**
           <p>
           @attr description
@@ -710,7 +710,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_row
         */
-        public static final int GridLayout_Layout_layout_row = 7;
+        public static int GridLayout_Layout_layout_row = 7;
         /**
           <p>
           @attr description
@@ -731,7 +731,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_rowSpan
         */
-        public static final int GridLayout_Layout_layout_rowSpan = 8;
+        public static int GridLayout_Layout_layout_rowSpan = 8;
         /**
           <p>
           @attr description
@@ -748,6 +748,6 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.gridlayout:layout_rowWeight
         */
-        public static final int GridLayout_Layout_layout_rowWeight = 9;
+        public static int GridLayout_Layout_layout_rowWeight = 9;
     };
 }

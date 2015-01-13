@@ -12,6 +12,7 @@ public class Item {
 	public int posY = 100;
 	public int width = Constants.DEFAULT_ITEM_WIDTH;
 	public int height = Constants.DEFAULT_ITEM_HEIGHT;
+	public float scaleFactor;
 	public int color;
 	public boolean isVisible = true;
 
@@ -20,7 +21,8 @@ public class Item {
 	public Bitmap bitmap;
 	public Path path;
 
-	private static int itemNumber = 1;
+	public static int itemNumber = 1;
+	public int number;
 
 	public Item(int shapeVersion, int color) {
 		this.shapeVersion = shapeVersion;
@@ -30,6 +32,7 @@ public class Item {
 		}
 
 		this.layerName = "Layer" + itemNumber;
+		number = itemNumber;
 		itemNumber++;
 	}
 }
