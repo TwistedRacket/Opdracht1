@@ -7,16 +7,15 @@
 
     <ImageView
         android:id="@+id/splash_screen_img"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_above="@+id/rackets"
-        android:layout_centerHorizontal="true"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true"
         android:src="@drawable/tr_splash" />
 
     <TextView
-        android:id="@+id/rackets"
         style="@style/styleSplashScreenText"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/splash_screen_img"
+        android:layout_centerHorizontal="true"
         android:text="Twisted Rackets" />
 
     <TextView
@@ -28,6 +27,6 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="25dp"
         android:text="powered by oce"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
 
 </RelativeLayout>

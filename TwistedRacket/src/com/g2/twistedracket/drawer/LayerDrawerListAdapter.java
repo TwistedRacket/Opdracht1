@@ -18,12 +18,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-public class LayerDrawerListAdapter extends BaseAdapter {
+public class LayerDrawerListAdapter extends BaseAdapter implements
+		DragNDropAdapter {
 
 	private Context context;
 	private ArrayList<Item> itemList;
 	private MainActivity activity;
 	HashMap<Integer, Boolean> visibilityByIndex = new HashMap<Integer, Boolean>();
+
+	int mPosition[];
+	int mHandler;
 
 	public LayerDrawerListAdapter(MainActivity activity, Context context,
 			ArrayList<Item> itemList) {
@@ -32,9 +36,15 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 		this.activity = activity;
 	}
 
+	private void setup(int size) {
+		mPosition = new int[size];
+
+		for (int i = 0; i < size; ++i)
+			mPosition[i] = i;
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-
 		final ViewHolder holder;
 		final int position2 = position;
 		if (convertView == null) {
@@ -106,6 +116,16 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 	}
 
 	@Override
+	public boolean isEnabled(int position) {
+		return super.isEnabled(mPosition[position]);
+	}
+
+	@Override
+	public View getDropDownView(int position, View view, ViewGroup group) {
+		return super.getDropDownView(mPosition[position], view, group);
+	}
+
+	@Override
 	public int getCount() {
 		return itemList.size();
 	}
@@ -125,6 +145,32 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 		ImageButton changeColorButton;
 		ImageButton visibilityOnButton;
 		ImageButton deleteButton;
+	}
+
+	@Override
+	public void onItemDrag(DragNDropListView parent, View view, int position,
+			long id) {
+
+	}
+
+	@Override
+	public void onItemDrop(DragNDropListView parent, View view,
+			int startPosition, int endPosition, long id) {
+		int position = mPosition[startPosition];
+
+		if (startPosition < endPosition)
+			for (int i = startPosition; i < endPosition; ++i)
+				mPosition[i] = mPosition[i + 1];
+		else if (endPosition < startPosition)
+			for (int i = startPosition; i > endPosition; --i)
+				mPosition[i] = mPosition[i - 1];
+
+		mPosition[endPosition] = position;
+	}
+
+	@Override
+	public int getDragHandler() {
+		return mHandler;
 	}
 
 }

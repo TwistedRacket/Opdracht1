@@ -120,10 +120,11 @@ public class CanvasFragment extends Fragment {
 			public void onClick(View v) {
 				if (!editText.getText().equals("")) {
 					canvasView.saveTo(editText.getText().toString());
+					Toast.makeText(getActivity().getApplicationContext(),
+							"Saved", Toast.LENGTH_LONG).show();
 				}
 				dialog.dismiss();
-				Toast.makeText(getActivity().getApplicationContext(), "Saved",
-						Toast.LENGTH_LONG).show();
+
 			}
 		});
 		dialog.show();
@@ -131,7 +132,7 @@ public class CanvasFragment extends Fragment {
 
 	private Dialog createDialog(String title) {
 		final Dialog dialog = new Dialog(getActivity());
-		dialog.setTitle("Set Name");
+		dialog.setTitle(title);
 		dialog.setContentView(R.layout.text_dialog);
 
 		return dialog;

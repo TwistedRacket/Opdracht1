@@ -37,6 +37,11 @@ public class CanvasView extends View {
 	private boolean scaleEnabled = true;
 	public boolean canShowRacket = true;
 	public boolean isInverted = false;
+	private boolean isFirstDrag = true;
+	private int firstDragX;
+	private int firstDragY;
+	private int itemStartingX;
+	private int itemStartingY;
 
 	public int selectedItem = 0;
 	public int selectedColor = Color.parseColor("#DA001A");
@@ -270,13 +275,32 @@ public class CanvasView extends View {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_MOVE:
 					Item item = itemList.get(selectedItem);
-					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
-						item.posX = (int) eventX;
-						item.posY = (int) eventY;
-					} else {
-						item.posX = (int) (eventX - (item.width / 2));
-						item.posY = (int) (eventY - (item.height / 2));
+					if (isFirstDrag) {
+						firstDragX = (int) eventX;
+						firstDragY = (int) eventY;
+						itemStartingX = item.posX;
+						itemStartingX = item.posY;
+
+						isFirstDrag = false;
 					}
+					if (!isFirstDrag) {
+						int diffX = firstDragX - (int) eventX;
+						int diffY = firstDragY - (int) eventY;
+
+						if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
+							item.posX = itemStartingX - diffX;
+							item.posY = itemStartingY - diffY;
+						} else {
+							// item.posX = (int) (eventX - (item.width / 2));
+							// item.posY = (int) (eventY - (item.height / 2));
+							item.posX = itemStartingX - diffX;
+							item.posY = itemStartingY - diffY;
+						}
+					}
+					break;
+				case MotionEvent.ACTION_UP:
+					isFirstDrag = true;
+					
 					break;
 				}
 			}

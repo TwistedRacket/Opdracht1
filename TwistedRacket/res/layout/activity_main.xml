@@ -36,7 +36,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right" >
 
-                <ListView
+                <com.g2.twistedracket.drawer.TouchListView
                     android:id="@+id/right_menu"
                     style="@style/deviderStyle"
                     android:layout_width="match_parent"

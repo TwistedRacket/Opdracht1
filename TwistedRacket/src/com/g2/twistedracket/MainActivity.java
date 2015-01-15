@@ -46,6 +46,7 @@ import com.g2.twistedracket.drawer.ItemListAdapter;
 import com.g2.twistedracket.drawer.LayerDrawerListAdapter;
 import com.g2.twistedracket.drawer.NavigationDrawerItem;
 import com.g2.twistedracket.drawer.NavigationDrawerListAdapter;
+import com.g2.twistedracket.drawer.TouchListView;
 
 ;
 
@@ -54,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private DrawerLayout drawerLayout;
 	private ListView navigationDrawerListView;
-	private ListView layerListView;
+	private TouchListView layerListView;
 	private ActionBarDrawerToggle actionBarDrawerToggle;
 
 	// slide menu items
@@ -200,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements
 		layerListAdapter = new LayerDrawerListAdapter(this,
 				getApplicationContext(), layerItemList);
 
-		layerListView = (ListView) findViewById(R.id.right_menu);
+		layerListView = (TouchListView) findViewById(R.id.right_menu);
 		layerListView.setAdapter(layerListAdapter);
 		layerListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override

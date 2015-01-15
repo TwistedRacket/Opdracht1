@@ -35,7 +35,6 @@
         <item name="android:textSize">45sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHighlight">@color/colorPrimary</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="deviderStyle" parent="@android:style/Widget.ListView">
