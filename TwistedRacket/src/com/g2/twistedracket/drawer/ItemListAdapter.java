@@ -34,13 +34,11 @@ public class ItemListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(
-					R.layout.navigation_drawer_list_item, parent, false);
+			convertView = inflater.inflate(R.layout.new_shape_list_item,
+					parent, false);
 
 			holder = new ViewHolder();
-			holder.title = (TextView) convertView.findViewById(R.id.title);
-			// holder.title = (TextView)
-			// convertView.findViewById(R.id.layerName);
+			holder.title = (TextView) convertView.findViewById(R.id.shapeTitle);
 			holder.imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 
 			convertView.setTag(holder);

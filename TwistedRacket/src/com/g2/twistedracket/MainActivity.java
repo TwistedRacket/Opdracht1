@@ -1,10 +1,12 @@
 package com.g2.twistedracket;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -20,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,18 +30,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.Toast;
 
 import com.g2.twistedracket.canvas.Item;
 import com.g2.twistedracket.canvas.Utils;
@@ -46,16 +46,13 @@ import com.g2.twistedracket.drawer.ItemListAdapter;
 import com.g2.twistedracket.drawer.LayerDrawerListAdapter;
 import com.g2.twistedracket.drawer.NavigationDrawerItem;
 import com.g2.twistedracket.drawer.NavigationDrawerListAdapter;
-import com.g2.twistedracket.drawer.TouchListView;
-
-;
 
 public class MainActivity extends ActionBarActivity implements
 		CanvasFragment.ActivityCommunication {
 
 	private DrawerLayout drawerLayout;
 	private ListView navigationDrawerListView;
-	private TouchListView layerListView;
+	private ListView layerListView;
 	private ActionBarDrawerToggle actionBarDrawerToggle;
 
 	// slide menu items
@@ -74,6 +71,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	private PopupWindow popupWindow;
 
+	private Uri imageUri;
+
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	static final int RESULT_LOAD_IMAGE = 2;
 
@@ -81,36 +80,19 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-
 		super.onCreate(savedInstanceState);
 
-		// getActionBar().hide();
 		setContentView(R.layout.fragment_splash_screen);
-
-		//
-		// FragmentManager fm = getFragmentManager();
-		// FragmentTransaction ft = fm.beginTransaction();
-		// ft.add(R.id.fragmentContainer, new CanvasFragment());
-		// ft.commit();
-
-		// getActionBar().show();
-
-		// FragmentManager fm = getFragmentManager();
-		// FragmentTransaction ft = fm.beginTransaction();
-		// ft.add(R.id.fragmentContainer, new SplashScreenFragment());
-		// ft.commit();
 
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				zwa();
+				displayCanasFragment();
 			}
-		}, 2000);
-
+		}, 1000);
 	}
 
-	public void zwa() {
+	public void displayCanasFragment() {
 		setContentView(R.layout.activity_main);
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -201,12 +183,15 @@ public class MainActivity extends ActionBarActivity implements
 		layerListAdapter = new LayerDrawerListAdapter(this,
 				getApplicationContext(), layerItemList);
 
-		layerListView = (TouchListView) findViewById(R.id.right_menu);
+		layerListView = (ListView) findViewById(R.id.right_menu);
+		layerListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		layerListView.setAdapter(layerListAdapter);
+		layerListView.setEmptyView(findViewById(R.id.empty_list_text_view));
 		layerListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+
 				drawerLayout.closeDrawers();
 				canvasFragment.canvasViewSetSelectedItem(position);
 			}
@@ -232,6 +217,10 @@ public class MainActivity extends ActionBarActivity implements
 				canvasFragment.canvasView.invalidate();
 			}
 		});
+	}
+
+	public void zwa2(int position) {
+		layerListView.setItemChecked(position, true);
 	}
 
 	private void createNewItemPopupWindow() {
@@ -274,6 +263,7 @@ public class MainActivity extends ActionBarActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+
 				drawerLayout.closeDrawers();
 				if (position == 7) {
 					canvasFragment.createColorPicker(null);
@@ -288,6 +278,8 @@ public class MainActivity extends ActionBarActivity implements
 				}
 				layerListAdapter.notifyDataSetChanged();
 				popupWindow.dismiss();
+
+				zwa2(layerListAdapter.getCount());
 			}
 		});
 
@@ -307,8 +299,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void launchCamera() {
-		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if (intent.resolveActivity(getPackageManager()) != null) {
+			ContentValues values = new ContentValues();
+			values.put(MediaStore.Images.Media.TITLE, "New Picture");
+			values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+			imageUri = getContentResolver().insert(
+					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 			startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
 		}
 	}
@@ -317,17 +315,31 @@ public class MainActivity extends ActionBarActivity implements
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(intent, RESULT_LOAD_IMAGE);
-
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-			Bundle extra = data.getExtras();
-			Bitmap imageBitmap = (Bitmap) extra.get("data");
-			imageBitmap = Utils.getResizedBitmap(imageBitmap, 1920, 1080);
-			canvasFragment.canvasView.addPicture(imageBitmap);
-			layerListAdapter.notifyDataSetChanged();
+			try {
+				String imageUrl = Utils.getRealPathFromURI(imageUri,
+						getApplicationContext());
+
+				File imgFile = new File(imageUrl);
+				if (imgFile.exists()) {
+					Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile
+							.getAbsolutePath());
+
+					canvasFragment.canvasView.addPicture(Utils
+							.getResizedBitmap(imageBitmap, 1920, 1080));
+					layerListAdapter.notifyDataSetChanged();
+
+					Log.i("paf", "Width: " + imageBitmap.getWidth());
+					Log.i("paf", "Height: " + imageBitmap.getHeight());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		} else if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
 				&& data != null) {
 			Uri selectedImage = data.getData();
@@ -371,7 +383,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 		} else if (item.getItemId() == R.id.action_save) {
 			canvasFragment.saveToImage();
-			
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -379,7 +391,6 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-
 	}
 
 	@Override
@@ -395,7 +406,6 @@ public class MainActivity extends ActionBarActivity implements
 			drawerLayout.closeDrawers();
 			return;
 		}
-
 		super.onBackPressed();
 	}
 
@@ -404,4 +414,8 @@ public class MainActivity extends ActionBarActivity implements
 		return layerItemList;
 	}
 
+	@Override
+	public LayerDrawerListAdapter getLayerListAdapter() {
+		return layerListAdapter;
+	}
 }

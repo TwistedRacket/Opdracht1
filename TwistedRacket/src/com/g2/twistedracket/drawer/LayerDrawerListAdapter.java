@@ -18,16 +18,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-public class LayerDrawerListAdapter extends BaseAdapter implements
-		DragNDropAdapter {
+public class LayerDrawerListAdapter extends BaseAdapter {
 
 	private Context context;
 	private ArrayList<Item> itemList;
 	private MainActivity activity;
-	HashMap<Integer, Boolean> visibilityByIndex = new HashMap<Integer, Boolean>();
-
-	int mPosition[];
-	int mHandler;
+	private HashMap<Integer, Boolean> visibilityByIndex = new HashMap<>();
 
 	public LayerDrawerListAdapter(MainActivity activity, Context context,
 			ArrayList<Item> itemList) {
@@ -36,15 +32,9 @@ public class LayerDrawerListAdapter extends BaseAdapter implements
 		this.activity = activity;
 	}
 
-	private void setup(int size) {
-		mPosition = new int[size];
-
-		for (int i = 0; i < size; ++i)
-			mPosition[i] = i;
-	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+
 		final ViewHolder holder;
 		final int position2 = position;
 		if (convertView == null) {
@@ -60,13 +50,17 @@ public class LayerDrawerListAdapter extends BaseAdapter implements
 					.findViewById(R.id.changeColorButton);
 			holder.deleteButton = (ImageButton) convertView
 					.findViewById(R.id.deleteButton);
+			holder.itemUpButton = (ImageButton) convertView
+					.findViewById(R.id.itemUpButton);
+			holder.itemDownButton = (ImageButton) convertView
+					.findViewById(R.id.itemDownButton);
 
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final Item item = itemList.get(position);
+		final Item item = itemList.get(itemList.size() - position - 1);
 		holder.title.setText(item.layerName);
 		holder.title.setTextColor(item.color);
 
@@ -112,17 +106,35 @@ public class LayerDrawerListAdapter extends BaseAdapter implements
 			}
 		});
 
+		holder.itemUpButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int newPosition = position2 - 1;
+				if (newPosition >= 0) {
+					Item tempItem = itemList.get(newPosition);
+					itemList.set(newPosition, itemList.get(position2));
+					itemList.set(position2, tempItem);
+					notifyDataSetChanged();
+					activity.invalidateCanvas();
+				}
+			}
+		});
+
+		holder.itemDownButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int newPosition = position2 + 1;
+				if (newPosition < itemList.size()) {
+					Item tempItem = itemList.get(newPosition);
+					itemList.set(newPosition, itemList.get(position2));
+					itemList.set(position2, tempItem);
+					notifyDataSetChanged();
+					activity.invalidateCanvas();
+				}
+			}
+		});
+
 		return convertView;
-	}
-
-	@Override
-	public boolean isEnabled(int position) {
-		return super.isEnabled(mPosition[position]);
-	}
-
-	@Override
-	public View getDropDownView(int position, View view, ViewGroup group) {
-		return super.getDropDownView(mPosition[position], view, group);
 	}
 
 	@Override
@@ -135,42 +147,18 @@ public class LayerDrawerListAdapter extends BaseAdapter implements
 		return itemList.get(position);
 	}
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
-
 	private static class ViewHolder {
 		TextView title;
 		ImageButton changeColorButton;
 		ImageButton visibilityOnButton;
 		ImageButton deleteButton;
+		ImageButton itemUpButton;
+		ImageButton itemDownButton;
 	}
 
 	@Override
-	public void onItemDrag(DragNDropListView parent, View view, int position,
-			long id) {
-
-	}
-
-	@Override
-	public void onItemDrop(DragNDropListView parent, View view,
-			int startPosition, int endPosition, long id) {
-		int position = mPosition[startPosition];
-
-		if (startPosition < endPosition)
-			for (int i = startPosition; i < endPosition; ++i)
-				mPosition[i] = mPosition[i + 1];
-		else if (endPosition < startPosition)
-			for (int i = startPosition; i > endPosition; --i)
-				mPosition[i] = mPosition[i - 1];
-
-		mPosition[endPosition] = position;
-	}
-
-	@Override
-	public int getDragHandler() {
-		return mHandler;
+	public long getItemId(int position) {
+		return 0;
 	}
 
 }

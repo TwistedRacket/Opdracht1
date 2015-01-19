@@ -24,26 +24,41 @@
 
             <ListView
                 android:id="@+id/left_menu"
-                android:layout_width="250dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:background="@color/itemListColor"
-                android:choiceMode="singleChoice" />
+                android:background="@color/white"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/navigation_drawer_list_view_pressed" />
 
             <RelativeLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="170dp"
+                android:layout_width="210dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="right" >
+                android:layout_gravity="right"
+                android:background="@color/white" >
 
-                <com.g2.twistedracket.drawer.TouchListView
+                <ListView
                     android:id="@+id/right_menu"
                     style="@style/deviderStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="fill_parent"
                     android:layout_alignParentTop="true"
-                    android:background="@color/itemListColor"
-                    android:choiceMode="singleChoice" />
+                    android:choiceMode="singleChoice"
+                    android:divider="@color/MotherFucker"
+                    android:dividerHeight="1dp"
+                    android:listSelector="@drawable/layer_list_view_pressed" />
+
+                <TextView
+                    android:id="@+id/empty_list_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:text="No layers"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
 
                 <CheckBox
                     android:id="@+id/showRacketCheckBox"
@@ -51,6 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:buttonTint="@color/colorPrimary"
                     android:checked="true"
                     android:text="Show Racket" />
 
@@ -60,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/showRacketCheckBox"
+                    android:buttonTint="@color/colorPrimary"
                     android:checked="false"
                     android:text="Invert Racket Colors" />
             </RelativeLayout>

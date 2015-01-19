@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NavigationDrawerListAdapter extends BaseAdapter {
@@ -27,7 +26,6 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 		this.navigationDrawerItems = navigationDrawerItems;
 		this.typeFace = Typeface.createFromAsset(context.getAssets(),
 				"fonts/Roboto-Medium.ttf");
-		// this.holder = new ViewHolder();
 	}
 
 	@Override
@@ -40,9 +38,6 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.title);
-			// holder.title = (TextView)
-			// convertView.findViewById(R.id.layerName);
-			holder.imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 
 			convertView.setTag(holder);
 		} else {
@@ -51,10 +46,6 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 		holder.title.setTypeface(typeFace);
 		holder.title.setText(navigationDrawerItems.get(position).getTitle());
-		if (navigationDrawerItems.get(position).getIcon() != 0) {
-			holder.imgIcon.setImageResource(navigationDrawerItems.get(position)
-					.getIcon());
-		}
 
 		return convertView;
 	}
@@ -76,6 +67,5 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 	private static class ViewHolder {
 		TextView title;
-		ImageView imgIcon;
 	}
 }

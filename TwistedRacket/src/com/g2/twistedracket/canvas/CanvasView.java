@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Canvas.VertexMode;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.Toast;
 
 public class CanvasView extends View {
 
@@ -37,7 +35,7 @@ public class CanvasView extends View {
 	private boolean scaleEnabled = true;
 	public boolean canShowRacket = true;
 	public boolean isInverted = false;
-	private boolean isFirstDrag = true;
+
 	private int firstDragX;
 	private int firstDragY;
 	private int itemStartingX;
@@ -118,12 +116,7 @@ public class CanvasView extends View {
 					} else {
 						item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
 						item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
-						item.posX = (int) detectorZ.getFocusX() - item.width
-								/ 2;
-						item.posY = (int) detectorZ.getFocusY() - item.height
-								/ 2;
 					}
-
 				}
 
 				paint.setColor(item.color);
@@ -197,8 +190,12 @@ public class CanvasView extends View {
 	}
 
 	public void saveTo(String fileName) {
+		boolean isTabletSize = getResources().getBoolean(R.bool.isTablet);
+		Log.i("paf", "" + isTabletSize + " W: " + this.getWidth() + " H: "
+				+ this.getHeight());
 		Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(),
 				Bitmap.Config.ARGB_8888);
+
 		Canvas canvas = new Canvas(bitmap);
 		this.draw(canvas);
 
@@ -247,6 +244,8 @@ public class CanvasView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		super.onTouchEvent(event);
+
 		float eventX = event.getX();
 		float eventY = event.getY();
 
@@ -273,34 +272,37 @@ public class CanvasView extends View {
 				}
 			} else if (movingEnabled && !itemList.isEmpty()) {
 				switch (event.getAction()) {
-				case MotionEvent.ACTION_MOVE:
+				case MotionEvent.ACTION_DOWN:
 					Item item = itemList.get(selectedItem);
-					if (isFirstDrag) {
-						firstDragX = (int) eventX;
-						firstDragY = (int) eventY;
-						itemStartingX = item.posX;
-						itemStartingX = item.posY;
 
-						isFirstDrag = false;
-					}
-					if (!isFirstDrag) {
-						int diffX = firstDragX - (int) eventX;
-						int diffY = firstDragY - (int) eventY;
+					firstDragX = (int) eventX;
+					firstDragY = (int) eventY;
+					itemStartingX = item.posX;
+					itemStartingY = item.posY;
 
-						if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
-							item.posX = itemStartingX - diffX;
-							item.posY = itemStartingY - diffY;
-						} else {
-							// item.posX = (int) (eventX - (item.width / 2));
-							// item.posY = (int) (eventY - (item.height / 2));
-							item.posX = itemStartingX - diffX;
-							item.posY = itemStartingY - diffY;
-						}
-					}
+					Log.i("paf", "FirstDragX: " + firstDragX);
+					Log.i("paf", "FirstDragY: " + firstDragY);
+
 					break;
-				case MotionEvent.ACTION_UP:
-					isFirstDrag = true;
-					
+				case MotionEvent.ACTION_MOVE:
+					item = itemList.get(selectedItem);
+
+					int diffX = firstDragX - (int) eventX;
+					int diffY = firstDragY - (int) eventY;
+
+					Log.i("paf", "DiffX: " + diffX);
+					Log.i("paf", "DiffY " + diffY);
+
+					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
+						item.posX = itemStartingX - diffX;
+						item.posY = itemStartingY - diffY;
+					} else {
+						item.posX = itemStartingX - diffX;
+						item.posY = itemStartingY - diffY;
+					}
+
+					Log.i("paf", "ItemPosX: " + item.posX);
+					Log.i("paf", "ItemPosY: " + item.posY);
 					break;
 				}
 			}

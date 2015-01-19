@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TwistedRacket</string>
+    <string name="app_name">TwistedRackets</string>
     <string name="action_settings">Settings</string>
     <string name="action_add_items">New Shape</string>
     <string name="action_menu">Menu</string>

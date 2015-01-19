@@ -11,7 +11,8 @@
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:choiceMode="singleChoice" 
-        android:background="@color/itemListColor"/>
+        android:background="@color/white"
+        android:choiceMode="singleChoice"
+        android:listSelector="@drawable/layer_list_view_pressed" />
 
 </LinearLayout>

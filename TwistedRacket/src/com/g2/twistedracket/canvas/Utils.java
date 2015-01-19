@@ -1,9 +1,12 @@
 package com.g2.twistedracket.canvas;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -41,6 +44,16 @@ public class Utils {
 		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
 				matrix, false);
 		return resizedBitmap;
+	}
+
+	public static String getRealPathFromURI(Uri contentUri, Context context) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = context.getContentResolver().query(contentUri, proj,
+				null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
 	}
 
 }

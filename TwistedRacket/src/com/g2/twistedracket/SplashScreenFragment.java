@@ -1,7 +1,5 @@
 package com.g2.twistedracket;
 
-import com.g2.twistedracket.canvas.CanvasView;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

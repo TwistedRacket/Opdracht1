@@ -5,7 +5,6 @@ public class Constants {
 	public static final int SHAPE_RECT = 0;
 	public static final int SHAPE_CIRCLE = 1;
 	public static final int SHAPE_TRIANGLE = 20;
-	public static final int DRAW = 2;
 	public static final int TEXT = 10;
 	public static final int PHOTO = 11;
 	public static final int FINGER_PAINT = 12;

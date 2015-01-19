@@ -7,12 +7,12 @@ import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 
 import com.g2.twistedracket.canvas.CanvasView;
 import com.g2.twistedracket.canvas.Item;
+import com.g2.twistedracket.drawer.LayerDrawerListAdapter;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,6 +71,8 @@ public class CanvasFragment extends Fragment {
 						if (item != null) {
 							item.color = color;
 							canvasView.invalidate();
+							activityCommunication.getLayerListAdapter()
+									.notifyDataSetChanged();
 						} else {
 							canvasView.setColor(color);
 						}
@@ -140,6 +142,8 @@ public class CanvasFragment extends Fragment {
 
 	protected interface ActivityCommunication {
 		public ArrayList<Item> getArrayList();
+
+		public LayerDrawerListAdapter getLayerListAdapter();
 
 	}
 }
