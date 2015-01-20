@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.view.View.OnClickListener;
 
 public class LayerDrawerListAdapter extends BaseAdapter {
@@ -36,7 +37,6 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		final ViewHolder holder;
-		final int position2 = position;
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -60,7 +60,9 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final Item item = itemList.get(itemList.size() - position - 1);
+		final int normalPosition = position;
+		final int reversedPosition = itemList.size() - position - 1;
+		final Item item = itemList.get(reversedPosition);
 		holder.title.setText(item.layerName);
 		holder.title.setTextColor(item.color);
 
@@ -68,21 +70,22 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 
-				if (!visibilityByIndex.containsKey(position2)
-						|| visibilityByIndex.get(position2)) {
-					visibilityByIndex.put(position2, false);
+				if (!visibilityByIndex.containsKey(reversedPosition)
+						|| visibilityByIndex.get(reversedPosition)) {
+					visibilityByIndex.put(reversedPosition, false);
 					holder.visibilityOnButton.setImageDrawable(context
 							.getResources().getDrawable(
 									R.drawable.ic_visibility_off_grey600_24dp));
 
-					Log.i("paf", "LDGV: false" + " Position: " + position2);
+					Log.i("TR", "LDGV: false" + " Position: "
+							+ reversedPosition);
 					item.isVisible = false;
-				} else if (!visibilityByIndex.get(position2)) {
-					visibilityByIndex.put(position2, true);
+				} else if (!visibilityByIndex.get(reversedPosition)) {
+					visibilityByIndex.put(reversedPosition, true);
 					holder.visibilityOnButton.setImageDrawable(context
 							.getResources().getDrawable(
 									R.drawable.ic_visibility_grey600_24dp));
-					Log.i("paf", "LDGV: true" + " Position: " + position2);
+					Log.i("TR", "LDGV: true" + " Position: " + reversedPosition);
 					item.isVisible = true;
 				}
 				activity.invalidateCanvas();
@@ -109,13 +112,16 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 		holder.itemUpButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int newPosition = position2 - 1;
-				if (newPosition >= 0) {
+				int newPosition = reversedPosition + 1;
+				if (newPosition < itemList.size()) {
 					Item tempItem = itemList.get(newPosition);
-					itemList.set(newPosition, itemList.get(position2));
-					itemList.set(position2, tempItem);
+					itemList.set(newPosition, itemList.get(reversedPosition));
+					itemList.set(reversedPosition, tempItem);
 					notifyDataSetChanged();
 					activity.invalidateCanvas();
+				} else {
+					Toast.makeText(context, "Cannot move layer up",
+							Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -123,13 +129,16 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 		holder.itemDownButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int newPosition = position2 + 1;
-				if (newPosition < itemList.size()) {
+				int newPosition = reversedPosition - 1;
+				if (reversedPosition > 0) {
 					Item tempItem = itemList.get(newPosition);
-					itemList.set(newPosition, itemList.get(position2));
-					itemList.set(position2, tempItem);
+					itemList.set(newPosition, itemList.get(reversedPosition));
+					itemList.set(reversedPosition, tempItem);
 					notifyDataSetChanged();
 					activity.invalidateCanvas();
+				} else {
+					Toast.makeText(context, "Cannot move layer down",
+							Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -159,6 +168,10 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		return 0;
+	}
+
+	public int revertSelectedItemPosition(int position) {
+		return itemList.size() - position - 1;
 	}
 
 }

@@ -21,7 +21,7 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="62dp"
         android:layout_marginStart="62dp"
-        android:background="@null"
+        android:background="?android:selectableItemBackground"
         android:gravity="center_vertical"
         android:src="@drawable/ic_visibility_grey600_24dp" />
 
@@ -34,7 +34,7 @@
         android:layout_marginRight="7dp"
         android:layout_toEndOf="@id/visibilityButton"
         android:layout_toRightOf="@id/visibilityButton"
-        android:background="@null"
+        android:background="?android:selectableItemBackground"
         android:gravity="center_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/ic_color_lens_grey600_24dp" />
@@ -46,31 +46,44 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/changeColorButton"
         android:layout_toRightOf="@id/changeColorButton"
-        android:background="@null"
+        android:background="?android:selectableItemBackground"
         android:gravity="center_vertical"
         android:src="@drawable/ic_delete_grey600_24dp" />
 
-    <ImageButton
-        android:id="@+id/itemUpButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
+    <View
+        android:id="@+id/verticalSeparator"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="6dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginStart="7dp"
         android:layout_toEndOf="@id/deleteButton"
         android:layout_toRightOf="@id/deleteButton"
-        android:background="@null"
+        android:background="@color/listViewSeparator" />
+
+    <ImageButton
+        android:id="@+id/itemUpButton"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/verticalSeparator"
+        android:layout_toRightOf="@id/verticalSeparator"
+        android:background="?android:selectableItemBackground"
         android:gravity="center_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/ic_unfold_more_grey600_24dp" />
 
     <ImageButton
         android:id="@+id/itemDownButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/itemUpButton"
         android:layout_toRightOf="@id/itemUpButton"
-        android:background="@null"
+        android:background="?android:selectableItemBackground"
         android:gravity="center_vertical"
-        android:src="@drawable/ic_delete_grey600_24dp" />
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_unfold_more_grey600_24dp" />
 
 </RelativeLayout>

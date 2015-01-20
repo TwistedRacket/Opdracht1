@@ -60,11 +60,11 @@ public class CanvasView extends View {
 		this.racketBackground = Bitmap.createScaledBitmap(BitmapFactory
 				.decodeResource(getResources(),
 						R.drawable.tennis_racket_full_black), Utils
-				.getWidth(context), Utils.getHeight(context), true);
+				.getWidth(context), Utils.get16by9Height(context), true);
 		this.racketBackgroundInverted = Bitmap.createScaledBitmap(BitmapFactory
 				.decodeResource(getResources(),
 						R.drawable.tennis_racket_full_black_invert), Utils
-				.getWidth(context), Utils.getHeight(context), true);
+				.getWidth(context), Utils.get16by9Height(context), true);
 
 		paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
@@ -100,17 +100,11 @@ public class CanvasView extends View {
 
 		int pos = 0;
 		for (Item item : itemList) {
-			// sLog.i("paf", "itemValue: " + item.number + "  " +
+			// sLog.i("TR", "itemValue: " + item.number + "  " +
 			// item.isVisible);
 			if (item.isVisible) {
 				if (pos == selectedItem && scaleEnabled && detectorZ != null) {
 
-					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
-						item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
-						item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
-						item.posX = (int) detectorZ.getFocusX();
-						item.posY = (int) detectorZ.getFocusY();
-					}
 					if (item.shapeVersion == Constants.TEXT) {
 						paint.setTextSize(160f * scaleFactor);
 					} else {
@@ -150,7 +144,7 @@ public class CanvasView extends View {
 					canvas.drawText(item.text, item.posX, item.posY, paint);
 					break;
 				case Constants.PHOTO:
-					canvas.drawBitmap(item.bitmap, 0, 0, paint);
+					canvas.drawBitmap(item.bitmap, item.posX, item.posY, paint);
 					break;
 				case Constants.FINGER_PAINT:
 					fingerPaint.setColor(item.color);
@@ -185,29 +179,46 @@ public class CanvasView extends View {
 			}
 		}
 		selectedItem = itemList.size() - 1;
-		Log.i("paf", "LSCREATE: " + itemList.size());
+		Log.i("TR", "LSCREATE: " + itemList.size());
 		invalidate();
 	}
 
-	public void saveTo(String fileName) {
-		boolean isTabletSize = getResources().getBoolean(R.bool.isTablet);
-		Log.i("paf", "" + isTabletSize + " W: " + this.getWidth() + " H: "
-				+ this.getHeight());
-		Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(),
-				Bitmap.Config.ARGB_8888);
+	public boolean saveTo(String fileName) {
+		boolean visibleItemsOnScreen = false;
 
-		Canvas canvas = new Canvas(bitmap);
-		this.draw(canvas);
+		if (itemList.isEmpty()) {
+			return false;
+		} else {
+			for (Item item : itemList) {
+				if (item.isVisible)
+					visibleItemsOnScreen = true;
+			}
+			if (visibleItemsOnScreen = false)
+				return false;
 
-		File file = new File(Environment.getExternalStorageDirectory() + "/"
-				+ fileName + ".png");
+			boolean isTabletSize = getResources().getBoolean(R.bool.isTablet);
+			Log.i("TR", "" + isTabletSize + " W: " + this.getWidth() + " H: "
+					+ this.getHeight());
+			Bitmap bitmap = Bitmap.createBitmap(this.getWidth(),
+					this.getHeight(), Bitmap.Config.ARGB_8888);
 
-		try {
-			file.createNewFile();
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100,
-					new FileOutputStream(file));
-		} catch (Exception e) {
-			e.printStackTrace();
+			Canvas canvas = new Canvas(bitmap);
+			this.draw(canvas);
+
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ "/" + fileName + ".png");
+
+			try {
+				file.createNewFile();
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100,
+						new FileOutputStream(file));
+
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return false;
 		}
 	}
 
@@ -257,15 +268,15 @@ public class CanvasView extends View {
 				// drawing is enabled.
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					Log.i("paf", "LS: " + itemList.size());
+					Log.i("TR", "LS: " + itemList.size());
 					itemList.get(selectedItem).path.moveTo(eventX, eventY);
 					return true;
 				case MotionEvent.ACTION_MOVE:
-					Log.i("paf", "LS: " + itemList.size());
+					Log.i("TR", "LS: " + itemList.size());
 					itemList.get(selectedItem).path.lineTo(eventX, eventY);
 					break;
 				case MotionEvent.ACTION_UP:
-					Log.i("paf", "UP");
+					Log.i("TR", "UP");
 					break;
 				default:
 					return false;
@@ -280,8 +291,8 @@ public class CanvasView extends View {
 					itemStartingX = item.posX;
 					itemStartingY = item.posY;
 
-					Log.i("paf", "FirstDragX: " + firstDragX);
-					Log.i("paf", "FirstDragY: " + firstDragY);
+					Log.i("TR", "FirstDragX: " + firstDragX);
+					Log.i("TR", "FirstDragY: " + firstDragY);
 
 					break;
 				case MotionEvent.ACTION_MOVE:
@@ -290,19 +301,14 @@ public class CanvasView extends View {
 					int diffX = firstDragX - (int) eventX;
 					int diffY = firstDragY - (int) eventY;
 
-					Log.i("paf", "DiffX: " + diffX);
-					Log.i("paf", "DiffY " + diffY);
+					Log.i("TR", "DiffX: " + diffX);
+					Log.i("TR", "DiffY " + diffY);
 
-					if (item.shapeVersion == Constants.SHAPE_CIRCLE) {
-						item.posX = itemStartingX - diffX;
-						item.posY = itemStartingY - diffY;
-					} else {
-						item.posX = itemStartingX - diffX;
-						item.posY = itemStartingY - diffY;
-					}
+					item.posX = itemStartingX - diffX;
+					item.posY = itemStartingY - diffY;
 
-					Log.i("paf", "ItemPosX: " + item.posX);
-					Log.i("paf", "ItemPosY: " + item.posY);
+					Log.i("TR", "ItemPosX: " + item.posX);
+					Log.i("TR", "ItemPosY: " + item.posY);
 					break;
 				}
 			}
@@ -327,7 +333,7 @@ public class CanvasView extends View {
 			// don't let the object get too small or too large.
 			scaleFactor = Math.max(0.1f, Math.min(scaleFactor, 5.0f));
 
-			Log.i("paf", "ScaleFactor: " + scaleFactor);
+			Log.i("TR", "ScaleFactor: " + scaleFactor);
 
 			invalidate();
 			return true;

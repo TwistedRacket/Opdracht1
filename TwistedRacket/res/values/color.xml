@@ -7,11 +7,12 @@
     <color name="colorAccent">#d1d1d1</color>
 
     <!-- Common -->
+    <color name="listViewSeparator">#e5e5e5</color>
     <color name="gray">#26272b</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="itemListColor">#EFEFEF</color>
     <color name="d7MotherFucker">#d7d7d7</color>
-     <color name="MotherFucker">#888888</color>
+    <color name="MotherFucker">#888888</color>
 
 </resources>

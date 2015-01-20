@@ -19,20 +19,34 @@ public class Utils {
 		Display display = wm.getDefaultDisplay();
 		Point point = new Point();
 		display.getSize(point);
-		Log.i("MyActivity", point.x + "");
+		Log.i("TR", point.x + "");
 
 		return point.x;
 	}
 
 	public static int getHeight(Context context) {
+		WindowManager wm = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point point = new Point();
+		display.getSize(point);
+		Log.i("TR", point.y + "");
+
+		return point.y;
+	}
+
+	public static int get16by9Height(Context context) {
 		int width = (int) Math.floor((getWidth(context)) * 1.574074);
-		Log.i("MyActivity", (width) + "");
+		Log.i("TR", (width) + "");
 		return width;
 	}
 
-	public static Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+	public static Bitmap getResizedBitmap(Bitmap bm, Context context) {
 		int width = bm.getWidth();
 		int height = bm.getHeight();
+		int newWidth = getWidth(context);
+		int newHeight = getHeight(context);
+		
 		float scaleWidth = ((float) newWidth) / width;
 		float scaleHeight = ((float) newHeight) / height;
 		// CREATE A MATRIX FOR THE MANIPULATION

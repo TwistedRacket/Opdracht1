@@ -13,6 +13,6 @@
         android:layout_gravity="center"
         android:background="@color/white"
         android:choiceMode="singleChoice"
-        android:listSelector="@drawable/layer_list_view_pressed" />
+        android:listSelector="@drawable/navigation_drawer_list_view_pressed" />
 
 </LinearLayout>

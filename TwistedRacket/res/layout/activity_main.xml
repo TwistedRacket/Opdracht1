@@ -45,7 +45,7 @@
                     android:layout_height="fill_parent"
                     android:layout_alignParentTop="true"
                     android:choiceMode="singleChoice"
-                    android:divider="@color/MotherFucker"
+                    android:divider="@color/listViewSeparator"
                     android:dividerHeight="1dp"
                     android:listSelector="@drawable/layer_list_view_pressed" />
 

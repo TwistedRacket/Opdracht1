@@ -10,8 +10,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="22dp"
-        android:layout_marginRight="22dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:gravity="center_vertical"
         android:orientation="vertical" >
     </TextView>

@@ -193,7 +193,8 @@ public class MainActivity extends ActionBarActivity implements
 					int position, long id) {
 
 				drawerLayout.closeDrawers();
-				canvasFragment.canvasViewSetSelectedItem(position);
+				canvasFragment.canvasViewSetSelectedItem(layerListAdapter
+						.revertSelectedItemPosition(position));
 			}
 		});
 
@@ -219,7 +220,7 @@ public class MainActivity extends ActionBarActivity implements
 		});
 	}
 
-	public void zwa2(int position) {
+	public void setSelectedLayerListItem(int position) {
 		layerListView.setItemChecked(position, true);
 	}
 
@@ -279,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements
 				layerListAdapter.notifyDataSetChanged();
 				popupWindow.dismiss();
 
-				zwa2(layerListAdapter.getCount());
+				setSelectedLayerListItem(0);
 			}
 		});
 
@@ -330,11 +331,12 @@ public class MainActivity extends ActionBarActivity implements
 							.getAbsolutePath());
 
 					canvasFragment.canvasView.addPicture(Utils
-							.getResizedBitmap(imageBitmap, 1920, 1080));
+							.getResizedBitmap(imageBitmap,
+									getApplicationContext()));
 					layerListAdapter.notifyDataSetChanged();
 
-					Log.i("paf", "Width: " + imageBitmap.getWidth());
-					Log.i("paf", "Height: " + imageBitmap.getHeight());
+					Log.i("TR", "Width: " + imageBitmap.getWidth());
+					Log.i("TR", "Height: " + imageBitmap.getHeight());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
