@@ -57,6 +57,7 @@ public class CanvasFragment extends Fragment {
 	protected void updateCanvas(int version) {
 		if (version == 8) {
 			canvasView.clearCanvas();
+			Item.resetNumbering();
 		} else if (version == 3) {
 			addTextItem();
 		} else {

@@ -84,4 +84,8 @@ public class Item {
 
 		return name + itemAmountMap.get(shapeVersion);
 	}
+
+	public static void resetNumbering() {
+		itemAmountMap.clear();
+	}
 }

@@ -73,18 +73,37 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 				if (!visibilityByIndex.containsKey(reversedPosition)
 						|| visibilityByIndex.get(reversedPosition)) {
 					visibilityByIndex.put(reversedPosition, false);
-					holder.visibilityOnButton.setImageDrawable(context
-							.getResources().getDrawable(
-									R.drawable.ic_visibility_off_grey600_24dp));
+
+					if (context.getResources().getBoolean(R.bool.isTablet)) {
+						holder.visibilityOnButton
+								.setImageDrawable(context
+										.getResources()
+										.getDrawable(
+												R.drawable.ic_visibility_off_grey600_36dp));
+					} else {
+						holder.visibilityOnButton
+								.setImageDrawable(context
+										.getResources()
+										.getDrawable(
+												R.drawable.ic_visibility_off_grey600_24dp));
+					}
 
 					Log.i("TR", "LDGV: false" + " Position: "
 							+ reversedPosition);
 					item.isVisible = false;
 				} else if (!visibilityByIndex.get(reversedPosition)) {
 					visibilityByIndex.put(reversedPosition, true);
-					holder.visibilityOnButton.setImageDrawable(context
-							.getResources().getDrawable(
-									R.drawable.ic_visibility_grey600_24dp));
+					boolean b = context.getResources().getBoolean(
+							R.bool.isTablet);
+					if (b) {
+						holder.visibilityOnButton.setImageDrawable(context
+								.getResources().getDrawable(
+										R.drawable.ic_visibility_grey600_36dp));
+					} else {
+						holder.visibilityOnButton.setImageDrawable(context
+								.getResources().getDrawable(
+										R.drawable.ic_visibility_grey600_24dp));
+					}
 					Log.i("TR", "LDGV: true" + " Position: " + reversedPosition);
 					item.isVisible = true;
 				}

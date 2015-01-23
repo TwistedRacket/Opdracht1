@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 public class NavigationDrawerListAdapter extends BaseAdapter {
 
@@ -38,6 +39,8 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 			holder = new ViewHolder();
 			holder.title = (TextView) convertView.findViewById(R.id.title);
+			holder.image = (ImageView) convertView
+					.findViewById(R.id.navigationDrawerImage);
 
 			convertView.setTag(holder);
 		} else {
@@ -46,6 +49,8 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 		holder.title.setTypeface(typeFace);
 		holder.title.setText(navigationDrawerItems.get(position).getTitle());
+		holder.image.setImageResource(navigationDrawerItems.get(position)
+				.getIcon());
 
 		return convertView;
 	}
@@ -67,5 +72,6 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
 	private static class ViewHolder {
 		TextView title;
+		ImageView image;
 	}
 }

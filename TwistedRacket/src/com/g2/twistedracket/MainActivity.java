@@ -132,9 +132,22 @@ public class MainActivity extends ActionBarActivity implements
 		navigationDrawerListView = (ListView) findViewById(R.id.left_menu);
 
 		navDrawerItems = new ArrayList<NavigationDrawerItem>();
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0]));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[1]));
-		navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[2]));
+
+		if (getResources().getBoolean(R.bool.isTablet)) {
+			navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0],
+					navMenuIconList.getResourceId(3, -1)));
+			navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[1],
+					navMenuIconList.getResourceId(4, -1)));
+			navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[2],
+					navMenuIconList.getResourceId(5, -1)));
+		} else {
+			navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[0],
+					navMenuIconList.getResourceId(0, -1)));
+			navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[1],
+					navMenuIconList.getResourceId(1, -1)));
+			navDrawerItems.add(new NavigationDrawerItem(navMenuTitleList[2],
+					navMenuIconList.getResourceId(2, -1)));
+		}
 		navMenuIconList.recycle();
 
 		// setting the nav drawer list adapter
@@ -192,7 +205,7 @@ public class MainActivity extends ActionBarActivity implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				drawerLayout.closeDrawers();
+				// drawerLayout.closeDrawers();
 				canvasFragment.canvasViewSetSelectedItem(layerListAdapter
 						.revertSelectedItemPosition(position));
 			}
