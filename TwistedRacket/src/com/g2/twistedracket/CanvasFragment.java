@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 public class CanvasFragment extends Fragment {
 
-	protected CanvasView canvasView;
+	public CanvasView canvasView;
 	private ActivityCommunication activityCommunication;
 
 	@Override

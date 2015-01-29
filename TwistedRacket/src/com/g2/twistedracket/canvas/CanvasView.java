@@ -102,11 +102,11 @@ public class CanvasView extends View {
 		for (Item item : itemList) {
 			// sLog.i("TR", "itemValue: " + item.number + "  " +
 			// item.isVisible);
-			if (item.isVisible) {
+			if (item.isVisible && item != null) {
 				if (pos == selectedItem && scaleEnabled && detectorZ != null) {
 
 					if (item.shapeVersion == Constants.TEXT) {
-						paint.setTextSize(160f * scaleFactor);
+						paint.setTextSize(50f * scaleFactor);
 					} else {
 						item.width = (int) (Constants.DEFAULT_ITEM_WIDTH * scaleFactor);
 						item.height = (int) (Constants.DEFAULT_ITEM_HEIGHT * scaleFactor);
@@ -157,9 +157,9 @@ public class CanvasView extends View {
 
 		if (canShowRacket) {
 			if (isInverted) {
-				canvas.drawBitmap(racketBackgroundInverted, 0, 0, paint);
+				canvas.drawBitmap(racketBackgroundInverted, 0, -80, paint);
 			} else {
-				canvas.drawBitmap(racketBackground, 0, 0, paint);
+				canvas.drawBitmap(racketBackground, 0, -80, paint);
 			}
 		}
 	}
@@ -260,7 +260,7 @@ public class CanvasView extends View {
 		float eventX = event.getX();
 		float eventY = event.getY();
 
-		if (eventX > MIN_TOUCH_X && eventX < MAX_TOUCH_X) {
+		if (eventX > MIN_TOUCH_X && eventX < MAX_TOUCH_X && selectedItem != -1) {
 			scaleGestureDetector.onTouchEvent(event);
 
 			if (fingerDrawingEnabled) {

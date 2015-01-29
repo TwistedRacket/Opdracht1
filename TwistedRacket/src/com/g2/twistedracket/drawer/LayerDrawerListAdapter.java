@@ -62,6 +62,7 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 
 		final int normalPosition = position;
 		final int reversedPosition = itemList.size() - position - 1;
+		final View finalConvertView = convertView;
 		final Item item = itemList.get(reversedPosition);
 		holder.title.setText(item.layerName);
 		holder.title.setTextColor(item.color);
@@ -123,8 +124,10 @@ public class LayerDrawerListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				itemList.remove(item);
+				activity.canvasFragment.canvasView.selectedItem = 0;
 				notifyDataSetChanged();
 				activity.invalidateCanvas();
+
 			}
 		});
 

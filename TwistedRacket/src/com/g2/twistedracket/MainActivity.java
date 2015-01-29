@@ -13,6 +13,7 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 
+import com.g2.twistedracket.R.color;
 import com.g2.twistedracket.canvas.Item;
 import com.g2.twistedracket.canvas.Utils;
 import com.g2.twistedracket.drawer.ItemListAdapter;
@@ -197,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements
 				getApplicationContext(), layerItemList);
 
 		layerListView = (ListView) findViewById(R.id.right_menu);
-		layerListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
 		layerListView.setAdapter(layerListAdapter);
 		layerListView.setEmptyView(findViewById(R.id.empty_list_text_view));
 		layerListView.setOnItemClickListener(new OnItemClickListener() {
