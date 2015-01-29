@@ -157,9 +157,9 @@ public class CanvasView extends View {
 
 		if (canShowRacket) {
 			if (isInverted) {
-				canvas.drawBitmap(racketBackgroundInverted, 0, -80, paint);
+				canvas.drawBitmap(racketBackgroundInverted, 0, 0, paint);
 			} else {
-				canvas.drawBitmap(racketBackground, 0, -80, paint);
+				canvas.drawBitmap(racketBackground, 0, 0, paint);
 			}
 		}
 	}
